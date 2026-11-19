@@ -553,6 +553,12 @@ export function buildDemoSeedPayload(actorUid: string, actorName: string): {
   return { devices, deviceDates, tickets, ticketDates, comments, auditLogs };
 }
 
+/**
+ * In the browser-only demo a second technician exists (see WorkshopProvider),
+ * so spread the workload. Firestore seeding keeps everything on the real user.
+ */
+const LOCAL_DEMO_SECOND_TECH = new Set(['demo_tck_02', 'demo_tck_04', 'demo_tck_06']);
+
 export function buildLocalDemoState(actorUid: string, actorName: string): {
   devices: Device[];
   tickets: Ticket[];
@@ -567,6 +573,9 @@ export function buildLocalDemoState(actorUid: string, actorName: string): {
   }));
   const tickets: Ticket[] = seed.tickets.map((ticket, i) => ({
     ...ticket,
+    ...(LOCAL_DEMO_SECOND_TECH.has(ticket.id)
+      ? { zugewiesenAn: 'demo_tech_uid', zugewiesenAnName: 'Hannah Becker' }
+      : {}),
     createdAt: seed.ticketDates[i].createdAt,
     updatedAt: seed.ticketDates[i].updatedAt,
     closedAt: seed.ticketDates[i].closedAt,

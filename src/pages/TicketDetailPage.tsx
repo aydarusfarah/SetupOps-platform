@@ -36,7 +36,7 @@ import {
   type TicketPriority,
   type TicketStatus,
 } from '../types';
-import { TicketPriorityBadge, TicketStatusBadge } from '../components/ui/Badges';
+import { SlaBadge, TicketPriorityBadge, TicketStatusBadge } from '../components/ui/Badges';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { useT } from '../i18n';
 import { OverflowMenu } from '../components/ui/OverflowMenu';
@@ -332,6 +332,7 @@ export function TicketDetailPage() {
               </span>
               <TicketPriorityBadge priority={ticket.prioritaet} />
               <TicketStatusBadge status={ticket.status} />
+              <SlaBadge ticket={ticket} />
               <span className="text-xs text-fg-muted">
                 {trTicketCategory(ticket.kategorie, lang)}
               </span>

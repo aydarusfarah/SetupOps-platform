@@ -26,18 +26,7 @@ import {
   type UserRole,
 } from '../types';
 import { useT } from '../i18n';
-
-function triggerCsvDownload(filename: string, csvContent: string) {
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-}
+import { triggerDownload } from '../lib/download';
 
 export function SettingsPage() {
   const {
@@ -236,7 +225,7 @@ export function SettingsPage() {
           <button
             type="button"
             onClick={() => {
-              triggerCsvDownload(
+              triggerDownload(
                 `setupops-devices-${new Date().toISOString().slice(0, 10)}.csv`,
                 generateDevicesCsv(devices, lang),
               );
@@ -254,7 +243,7 @@ export function SettingsPage() {
           <button
             type="button"
             onClick={() => {
-              triggerCsvDownload(
+              triggerDownload(
                 `setupops-tickets-${new Date().toISOString().slice(0, 10)}.csv`,
                 generateTicketsCsv(tickets, lang),
               );

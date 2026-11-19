@@ -40,6 +40,7 @@ import { HandoverReceiptModal } from '../components/HandoverReceiptModal';
 import type { HandoverInput } from '../types';
 import { useT } from '../i18n';
 import { OverflowMenu } from '../components/ui/OverflowMenu';
+import { DeviceTimeline } from '../components/device/DeviceTimeline';
 
 type DetailTab = 'overview' | 'checklist' | 'tickets' | 'history';
 
@@ -691,51 +692,7 @@ export function DeviceDetailPage() {
       )}
 
       {activeTab === 'history' && (
-        <div className="rounded-card border border-line bg-surface p-6 shadow-sm">
-          <h2 className="text-base font-semibold text-fg">
-            {t('deviceDetail.changeHistoryAuditLog')}
-          </h2>
-          {deviceLogs.length === 0 ? (
-            <p className="mt-6 text-sm text-fg-subtle">
-              {t('deviceDetail.noHistoryEntriesYet')}
-            </p>
-          ) : (
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full border-collapse text-left text-sm">
-                <thead className="border-b border-line text-xs font-semibold tracking-wider text-fg-muted uppercase">
-                  <tr>
-                    <th className="py-2.5 pr-4">{t('deviceDetail.timestamp')}</th>
-                    <th className="py-2.5 pr-4">{t('deviceDetail.field')}</th>
-                    <th className="py-2.5 pr-4">{t('deviceDetail.oldValue')}</th>
-                    <th className="py-2.5 pr-4">{t('deviceDetail.newValue')}</th>
-                    <th className="py-2.5">{t('deviceDetail.user')}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-line-subtle">
-                  {deviceLogs.map((log) => (
-                    <tr key={log.id}>
-                      <td className="tabular-nums py-2.5 pr-4 text-xs text-fg-muted whitespace-nowrap">
-                        {formatLocaleDateTime(log.timestamp, lang)}
-                      </td>
-                      <td className="py-2.5 pr-4 font-medium text-fg">
-                        {trAuditField(log.field, lang)}
-                      </td>
-                      <td className="py-2.5 pr-4 text-fg-muted">
-                        {trAuditValue(log.oldValue, lang)}
-                      </td>
-                      <td className="py-2.5 pr-4 text-fg">
-                        {trAuditValue(log.newValue, lang)}
-                      </td>
-                      <td className="py-2.5 text-xs text-fg-muted">
-                        {log.userName}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
+        <DeviceTimeline deviceId={device.id} logs={deviceLogs} tickets={deviceTickets} />
       )}
 
       <LabelPrintModal open={printOpen} device={device} onClose={() => setPrintOpen(false)} />

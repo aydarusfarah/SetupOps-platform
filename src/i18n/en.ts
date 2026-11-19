@@ -533,6 +533,75 @@ export const en = {
 
   // ── common (actions) ──
   "common.moreActions": "More actions",
+
+  // ── sla ──
+  "sla.overdueBy": "Overdue {duration}",
+  "sla.dueIn": "Due in {duration}",
+  "sla.paused": "SLA paused",
+  "sla.met": "Within SLA",
+  "sla.breached": "SLA missed",
+  "sla.dueAt": "SLA due {date}",
+  "sla.column": "SLA",
+  "sla.target": "Resolution target",
+  "sla.hours": "{hours} h",
+
+  // ── dashboard (sla) ──
+  "dashboard.openTicketsFootnote": "{overdue} overdue · {high} high/critical · {waiting} waiting for parts",
+
+  // ── timeline ──
+  "timeline.title": "Device history",
+  "timeline.subtitle": "{count} events · audit log and linked tickets",
+  "timeline.filterLabel": "Filter history",
+  "timeline.filterAll": "All",
+  "timeline.filterLifecycle": "Lifecycle",
+  "timeline.filterChecklist": "Checklist",
+  "timeline.filterTickets": "Tickets",
+  "timeline.ticketOpened": "Ticket opened",
+  "timeline.ticketResolved": "Ticket resolved",
+
+  // ── reports ──
+  "shell.navReports": "Reports",
+  "reports.title": "Reports",
+  "reports.subtitle": "Service levels, throughput and workload for the workshop.",
+  "reports.devicesCsv": "Devices CSV",
+  "reports.ticketsCsv": "Tickets CSV",
+  "reports.exportPdf": "Export PDF",
+  "reports.periodLabel": "Reporting period",
+  "reports.period30": "30 days",
+  "reports.period90": "90 days",
+  "reports.period365": "12 months",
+  "reports.periodAll": "All time",
+  "reports.printTitle": "SetupOps · Workshop report",
+  "reports.generatedAt": "Generated {date}",
+  "reports.summary": "Summary",
+  "reports.ticketsCreated": "Tickets created",
+  "reports.ticketsResolved": "Tickets resolved",
+  "reports.slaCompliance": "SLA compliance",
+  "reports.ofResolved": "of {count} resolved",
+  "reports.avgResolution": "Avg. resolution",
+  "reports.hoursValue": "{hours} h",
+  "reports.openNow": "Open now",
+  "reports.overdueNow": "{count} overdue",
+  "reports.handedOver": "Devices handed over",
+  "reports.devicesThroughput": "{registered} registered · {readied} set up",
+  "reports.slaByPriority": "SLA by priority",
+  "reports.slaByPriorityHint": "Tickets resolved in the period, measured against the resolution target",
+  "reports.resolved": "Resolved",
+  "reports.withinSla": "Within SLA",
+  "reports.compliance": "Compliance",
+  "reports.ticketsByCategory": "Tickets by category",
+  "reports.createdInPeriod": "Created in the period",
+  "reports.workload": "Technician workload",
+  "reports.workloadHint": "Open now and resolved in the period",
+  "reports.openTickets": "Open",
+  "reports.noTickets": "No tickets yet.",
+  "reports.fleet": "Fleet snapshot",
+  "reports.fleetHint": "{count} devices by status and type",
+
+  // ── shell (demo) ──
+  "shell.demoTitle": "Demo workspace",
+  "shell.demoText": "Sample data only — your changes stay in this browser and reset when you reload.",
+  "shell.demoSignIn": "Sign in to a real workspace →",
 } as const;
 
 export type MessageKey = keyof typeof en;

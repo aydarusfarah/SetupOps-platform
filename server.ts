@@ -3,11 +3,20 @@ import express from 'express';
 import path from 'node:path';
 import fs from 'node:fs';
 import { GoogleGenAI, Type } from '@google/genai';
+import { createRateLimiter } from './src/lib/rateLimit.ts';
 
 const PORT = Number(process.env.PORT) || 3000;
 const app = express();
 
 app.use(express.json({ limit: '1mb' }));
+// Behind Cloud Run / a reverse proxy: trust the first hop so req.ip is the client.
+app.set('trust proxy', 1);
+
+// The AI endpoint is reachable from the public demo: cap calls per client IP.
+const diagnoseLimiter = createRateLimiter({
+  limit: Number(process.env.DIAGNOSE_RATE_LIMIT) || 10,
+  windowMs: 10 * 60_000,
+});
 
 interface DiagnoseRequestBody {
   lang?: 'de' | 'en';
@@ -52,6 +61,16 @@ interface DiagnoseRequestBody {
 app.post('/api/diagnose', async (req, res) => {
   const body = req.body as DiagnoseRequestBody;
   const isEn = body?.lang === 'en';
+  const rate = diagnoseLimiter(req.ip ?? 'unknown');
+  if (!rate.allowed) {
+    res.setHeader('Retry-After', String(rate.retryAfterSec));
+    res.status(429).json({
+      error: isEn
+        ? `Too many AI diagnostics requests. Please try again in ${Math.ceil(rate.retryAfterSec / 60)} min.`
+        : `Zu viele KI-Diagnose-Anfragen. Bitte in ${Math.ceil(rate.retryAfterSec / 60)} Min. erneut versuchen.`,
+    });
+    return;
+  }
   try {
     const ticket = body?.ticket;
     const device = body?.device;

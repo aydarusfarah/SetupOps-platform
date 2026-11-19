@@ -5,6 +5,7 @@ import {
   Laptop,
   Ticket as TicketIcon,
   Settings,
+  BarChart3,
   Search,
   Sun,
   Moon,
@@ -15,6 +16,7 @@ import {
   LogOut,
   ChevronRight,
   ChevronDown,
+  Info,
 } from 'lucide-react';
 import { useWorkshopData } from '../hooks/useWorkshopData';
 import { useTheme } from '../hooks/useTheme';
@@ -35,6 +37,7 @@ const NAV_ITEMS: NavItem[] = [
   { to: '/', label: 'shell.navDashboard', icon: LayoutDashboard },
   { to: '/devices', label: 'common.devices', icon: Laptop },
   { to: '/tickets', label: 'shell.navTickets', icon: TicketIcon },
+  { to: '/reports', label: 'shell.navReports', icon: BarChart3 },
   { to: '/settings', label: 'shell.navSettings', icon: Settings },
 ];
 
@@ -83,12 +86,13 @@ function useBreadcrumbs(): Array<{ label: string; to?: string }> {
       { label: tck ? tck.ticketNr : t('shell.ticketDetails') },
     ];
   }
+  if (pathname === '/reports') return [{ label: t('shell.navReports') }];
   if (pathname === '/settings') return [{ label: t('shell.settings') }];
   return [{ label: 'SetupOps' }];
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  const { currentUser, signOut } = useWorkshopData();
+  const { currentUser, signOut, isPreviewAutostart } = useWorkshopData();
   const { theme, toggleTheme } = useTheme();
   const { lang } = useLanguage();
   const t = useT();
@@ -290,6 +294,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
+
+      {isPreviewAutostart && (
+        <div
+          role="note"
+          className="no-print flex flex-wrap items-center justify-center gap-x-3 gap-y-1 border-b border-primary/20 bg-accent-soft px-4 py-1.5 text-center text-xs text-fg"
+        >
+          <Info className="h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />
+          <span>
+            <strong className="font-semibold">{t('shell.demoTitle')}</strong> · {t('shell.demoText')}
+          </span>
+          <a href="/" className="font-medium text-accent underline-offset-2 hover:underline">
+            {t('shell.demoSignIn')}
+          </a>
+        </div>
+      )}
 
       <div className="flex">
         {/* Side navigation (desktop) */}

@@ -25,7 +25,7 @@ import {
   type TicketStatus,
 } from '../types';
 import { isTicketOpen } from '../lib/domain';
-import { TicketPriorityBadge, TicketStatusBadge } from '../components/ui/Badges';
+import { SlaBadge, TicketPriorityBadge, TicketStatusBadge } from '../components/ui/Badges';
 import { EmptyState } from '../components/ui/EmptyState';
 import { TableSkeleton } from '../components/ui/Skeleton';
 import { useT } from '../i18n';
@@ -304,13 +304,14 @@ export function TicketsPage() {
               <table className="w-full border-collapse text-left text-sm">
                 <thead className="sticky top-0 z-10 bg-subtle text-xs font-semibold text-fg-muted shadow-[inset_0_-1px_0_var(--so-line)]">
                   <tr>
-                    <th className="px-4 py-2.5">{t('tickets.ticketNo')}</th>
-                    <th className="px-4 py-2.5">{t('tickets.titleDevice')}</th>
-                    <th className="px-4 py-2.5">{t('tickets.category')}</th>
-                    <th className="px-4 py-2.5">{t('common.priority')}</th>
-                    <th className="px-4 py-2.5">Status</th>
-                    <th className="px-4 py-2.5">{t('common.assignee')}</th>
-                    <th className="px-4 py-2.5">{t('tickets.created')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('tickets.ticketNo')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('tickets.titleDevice')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('tickets.category')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('common.priority')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">Status</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('sla.column')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('common.assignee')}</th>
+                    <th className="px-4 py-2.5 whitespace-nowrap">{t('tickets.created')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line-subtle">
@@ -324,7 +325,7 @@ export function TicketsPage() {
                         <td className={`px-4 ${rowPad}`}>
                           <Link
                             to={`/tickets/${ticket.id}`}
-                            className="font-mono-code font-semibold text-accent hover:underline"
+                            className="font-mono-code font-semibold whitespace-nowrap text-accent hover:underline"
                           >
                             {ticket.ticketNr}
                           </Link>
@@ -340,7 +341,7 @@ export function TicketsPage() {
                             </p>
                           </Link>
                         </td>
-                        <td className={`px-4 text-xs text-fg-muted ${rowPad}`}>
+                        <td className={`px-4 text-xs whitespace-nowrap text-fg-muted ${rowPad}`}>
                           {trTicketCategory(ticket.kategorie, lang)}
                         </td>
                         <td className={`px-4 ${rowPad}`}>
@@ -349,7 +350,10 @@ export function TicketsPage() {
                         <td className={`px-4 ${rowPad}`}>
                           <TicketStatusBadge status={ticket.status} />
                         </td>
-                        <td className={`px-4 text-xs text-fg-muted ${rowPad}`}>
+                        <td className={`px-4 ${rowPad}`}>
+                          <SlaBadge ticket={ticket} />
+                        </td>
+                        <td className={`px-4 text-xs whitespace-nowrap text-fg-muted ${rowPad}`}>
                           {ticket.zugewiesenAnName || (t('common.unassigned'))}
                         </td>
                         <td className={`tabular-nums px-4 text-xs text-fg-subtle ${rowPad}`}>
@@ -379,7 +383,10 @@ export function TicketsPage() {
                 <p className="mt-1.5 font-medium text-fg">{ticket.titel}</p>
                 <div className="mt-2 flex items-center justify-between gap-2 text-xs text-fg-muted">
                   <span className="font-mono-code">{ticket.deviceAssetTag}</span>
-                  <TicketStatusBadge status={ticket.status} />
+                  <span className="flex items-center gap-1.5">
+                    <SlaBadge ticket={ticket} compact />
+                    <TicketStatusBadge status={ticket.status} />
+                  </span>
                 </div>
               </Link>
             ))}
@@ -451,8 +458,11 @@ export function TicketsPage() {
                         >
                           {ticket.titel}
                         </Link>
+                        <div className="mt-2 empty:hidden">
+                          <SlaBadge ticket={ticket} compact />
+                        </div>
 
-                        <div className="mt-3 flex items-center justify-between gap-2 border-ticket border-line-subtle pt-2.5">
+                        <div className="mt-3 flex items-center justify-between gap-2 border-t border-line-subtle pt-2.5">
                           <Link
                             to={`/devices/${ticket.deviceId}`}
                             className="font-mono-code text-xs text-fg-muted hover:text-accent"

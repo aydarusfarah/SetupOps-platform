@@ -535,4 +535,73 @@ export const de: Messages = {
 
   // ── common (actions) ──
   "common.moreActions": "Weitere Aktionen",
+
+  // ── sla ──
+  "sla.overdueBy": "Überfällig {duration}",
+  "sla.dueIn": "Fällig in {duration}",
+  "sla.paused": "SLA pausiert",
+  "sla.met": "SLA eingehalten",
+  "sla.breached": "SLA verfehlt",
+  "sla.dueAt": "SLA fällig {date}",
+  "sla.column": "SLA",
+  "sla.target": "Lösungsziel",
+  "sla.hours": "{hours} Std.",
+
+  // ── dashboard (sla) ──
+  "dashboard.openTicketsFootnote": "{overdue} überfällig · {high} Hoch/Kritisch · {waiting} wartet auf Teile",
+
+  // ── timeline ──
+  "timeline.title": "Geräteverlauf",
+  "timeline.subtitle": "{count} Ereignisse · Änderungsprotokoll und verknüpfte Tickets",
+  "timeline.filterLabel": "Verlauf filtern",
+  "timeline.filterAll": "Alle",
+  "timeline.filterLifecycle": "Lebenszyklus",
+  "timeline.filterChecklist": "Checkliste",
+  "timeline.filterTickets": "Tickets",
+  "timeline.ticketOpened": "Ticket eröffnet",
+  "timeline.ticketResolved": "Ticket gelöst",
+
+  // ── reports ──
+  "shell.navReports": "Berichte",
+  "reports.title": "Berichte",
+  "reports.subtitle": "Service-Level, Durchsatz und Auslastung der Werkstatt.",
+  "reports.devicesCsv": "Geräte-CSV",
+  "reports.ticketsCsv": "Ticket-CSV",
+  "reports.exportPdf": "Als PDF exportieren",
+  "reports.periodLabel": "Berichtszeitraum",
+  "reports.period30": "30 Tage",
+  "reports.period90": "90 Tage",
+  "reports.period365": "12 Monate",
+  "reports.periodAll": "Gesamter Zeitraum",
+  "reports.printTitle": "SetupOps · Werkstattbericht",
+  "reports.generatedAt": "Erstellt am {date}",
+  "reports.summary": "Zusammenfassung",
+  "reports.ticketsCreated": "Erstellte Tickets",
+  "reports.ticketsResolved": "Gelöste Tickets",
+  "reports.slaCompliance": "SLA-Erfüllung",
+  "reports.ofResolved": "von {count} gelösten",
+  "reports.avgResolution": "Ø Lösungszeit",
+  "reports.hoursValue": "{hours} Std.",
+  "reports.openNow": "Aktuell offen",
+  "reports.overdueNow": "{count} überfällig",
+  "reports.handedOver": "Ausgegebene Geräte",
+  "reports.devicesThroughput": "{registered} erfasst · {readied} eingerichtet",
+  "reports.slaByPriority": "SLA nach Priorität",
+  "reports.slaByPriorityHint": "Im Zeitraum gelöste Tickets gemessen am Lösungsziel",
+  "reports.resolved": "Gelöst",
+  "reports.withinSla": "Im SLA",
+  "reports.compliance": "Erfüllung",
+  "reports.ticketsByCategory": "Tickets nach Kategorie",
+  "reports.createdInPeriod": "Im Zeitraum erstellt",
+  "reports.workload": "Auslastung der Techniker",
+  "reports.workloadHint": "Aktuell offen und im Zeitraum gelöst",
+  "reports.openTickets": "Offen",
+  "reports.noTickets": "Noch keine Tickets.",
+  "reports.fleet": "Bestandsübersicht",
+  "reports.fleetHint": "{count} Geräte nach Status und Typ",
+
+  // ── shell (demo) ──
+  "shell.demoTitle": "Demo-Arbeitsbereich",
+  "shell.demoText": "Nur Beispieldaten – Ihre Änderungen bleiben im Browser und werden beim Neuladen zurückgesetzt.",
+  "shell.demoSignIn": "Bei einem echten Arbeitsbereich anmelden →",
 };

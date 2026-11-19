@@ -12,6 +12,7 @@ import {
   getDeviceTypeDistribution,
   getWeeklyTicketActivity,
 } from '../lib/domain';
+import { getSlaSummary } from '../lib/sla';
 import { SkeletonBar } from '../components/ui/Skeleton';
 import { PageHeader } from '../components/ui/Panel';
 import { KpiTile } from '../components/dashboard/KpiTile';
@@ -78,6 +79,7 @@ export function DashboardPage() {
     [devices, lang],
   );
 
+  const sla = useMemo(() => getSlaSummary(tickets), [tickets]);
   const weeks = useMemo(() => getWeeklyTicketActivity(tickets, 8, new Date(), lang), [tickets, lang]);
   const recentLogs = useMemo(() => auditLogs.slice(0, 7), [auditLogs]);
 
@@ -174,9 +176,10 @@ export function DashboardPage() {
           icon={<TicketIcon className="h-4 w-4" />}
           tone="warning"
           percent={pct(summary.criticalHighTicketsCount, summary.openTicketsCount)}
-          footnote={t('dashboard.criticalhighticketscountHighCriticalWaitingpartscountWaiting', {
-            criticalHighTicketsCount: summary.criticalHighTicketsCount,
-            waitingPartsCount: summary.waitingPartsCount,
+          footnote={t('dashboard.openTicketsFootnote', {
+            overdue: sla.overdue,
+            high: summary.criticalHighTicketsCount,
+            waiting: summary.waitingPartsCount,
           })}
           linkHint={t('dashboard.queue')}
         />

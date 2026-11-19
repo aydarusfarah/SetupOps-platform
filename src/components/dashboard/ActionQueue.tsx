@@ -6,7 +6,7 @@ import { useT } from '../../i18n';
 import { formatLocaleDate, trDeviceType, trTicketCategory } from '../../i18n/labels';
 import { formatRelativeAge, getChecklistProgress, getUrgentOpenTickets, isTicketOpen } from '../../lib/domain';
 import type { AppUser, Device, Ticket } from '../../types';
-import { DeviceStatusBadge, TicketPriorityBadge, TicketStatusBadge } from '../ui/Badges';
+import { DeviceStatusBadge, SlaBadge, TicketPriorityBadge, TicketStatusBadge } from '../ui/Badges';
 import { Panel } from '../ui/Panel';
 import { SegmentedControl } from '../ui/SegmentedControl';
 
@@ -163,6 +163,7 @@ export function ActionQueue({
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
+                  <SlaBadge ticket={ticket} compact />
                   <TicketPriorityBadge priority={ticket.prioritaet} />
                   <TicketStatusBadge status={ticket.status} />
                   {rowChevron}

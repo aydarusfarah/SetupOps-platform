@@ -22,6 +22,7 @@ const TicketsPage = page(() => import('./pages/TicketsPage'), 'TicketsPage');
 const TicketFormPage = page(() => import('./pages/TicketFormPage'), 'TicketFormPage');
 const TicketDetailPage = page(() => import('./pages/TicketDetailPage'), 'TicketDetailPage');
 const SettingsPage = page(() => import('./pages/SettingsPage'), 'SettingsPage');
+const ReportsPage = page(() => import('./pages/ReportsPage'), 'ReportsPage');
 
 function AuthenticatedRoutes() {
   const { authReady, currentUser } = useWorkshopData();
@@ -53,6 +54,7 @@ function AuthenticatedRoutes() {
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/tickets/new" element={<TicketFormPage />} />
           <Route path="/tickets/:id" element={<TicketDetailPage />} />
+          <Route path="/reports" element={<ReportsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

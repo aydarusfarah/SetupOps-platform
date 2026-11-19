@@ -1,6 +1,9 @@
 import { useLanguage } from '../../hooks/useLanguage';
 import { trDeviceStatus, trTicketPriority, trTicketStatus } from '../../i18n/labels';
-import type { DeviceStatus, TicketPriority, TicketStatus } from '../../types';
+import type { DeviceStatus, Ticket, TicketPriority, TicketStatus } from '../../types';
+import { useT } from '../../i18n';
+import { formatLocaleShortDateTime } from '../../i18n/labels';
+import { formatDuration, getTicketSla, type SlaState } from '../../lib/sla';
 
 interface BadgeTone {
   bg: string;
@@ -42,10 +45,11 @@ const TONES: Record<'success' | 'warning' | 'danger' | 'info' | 'neutral', Badge
   },
 };
 
-function StatusChip({ tone, label }: { tone: BadgeTone; label: string }) {
+function StatusChip({ tone, label, title }: { tone: BadgeTone; label: string; title?: string }) {
   return (
     <span
-      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-0.5 text-xs font-medium ${tone.bg} ${tone.text} ${tone.border}`}
+      title={title}
+      className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-control border px-1.5 py-0.5 text-xs font-medium ${tone.bg} ${tone.text} ${tone.border}`}
     >
       <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} aria-hidden="true" />
       <span>{label}</span>
@@ -90,4 +94,52 @@ const PRIORITY_TONE: Record<TicketPriority, keyof typeof TONES> = {
 export function TicketPriorityBadge({ priority }: { priority: TicketPriority }) {
   const { lang } = useLanguage();
   return <StatusChip tone={TONES[PRIORITY_TONE[priority]]} label={trTicketPriority(priority, lang)} />;
+}
+
+const SLA_TONE: Record<SlaState, keyof typeof TONES> = {
+  overdue: 'danger',
+  atRisk: 'warning',
+  onTrack: 'neutral',
+  paused: 'neutral',
+  met: 'success',
+  breached: 'danger',
+};
+
+/**
+ * SLA indicator for a ticket. `compact` hides the calm states (on track / met)
+ * so list views only draw attention where it is needed.
+ */
+export function SlaBadge({
+  ticket,
+  compact = false,
+  now,
+}: {
+  ticket: Pick<Ticket, 'prioritaet' | 'status' | 'createdAt' | 'closedAt' | 'updatedAt'>;
+  compact?: boolean;
+  now?: Date;
+}) {
+  const t = useT();
+  const { lang } = useLanguage();
+  const sla = getTicketSla(ticket, now);
+  if (compact && (sla.state === 'onTrack' || sla.state === 'met')) return null;
+
+  const duration = formatDuration(sla.remainingMs);
+  const label =
+    sla.state === 'overdue'
+      ? t('sla.overdueBy', { duration })
+      : sla.state === 'atRisk' || sla.state === 'onTrack'
+        ? t('sla.dueIn', { duration })
+        : sla.state === 'paused'
+          ? t('sla.paused')
+          : sla.state === 'met'
+            ? t('sla.met')
+            : t('sla.breached');
+
+  return (
+    <StatusChip
+      tone={TONES[SLA_TONE[sla.state]]}
+      label={label}
+      title={t('sla.dueAt', { date: formatLocaleShortDateTime(sla.dueAt, lang) })}
+    />
+  );
 }
