@@ -19,34 +19,3 @@ export function BrandMark({ className = 'h-7 w-7' }: { className?: string }) {
     </svg>
   );
 }
-
-/** Mark + wordmark, for the shell bar and the sign-in page. */
-export function BrandLockup({
-  tagline,
-  tone = 'dark',
-}: {
-  tagline?: string;
-  tone?: 'dark' | 'light';
-}) {
-  return (
-    <span className="flex items-center gap-2.5">
-      <BrandMark />
-      <span className="flex items-baseline gap-2 whitespace-nowrap">
-        <span
-          className={`text-[15px] font-semibold tracking-tight ${tone === 'dark' ? 'text-shell-fg' : 'text-fg'}`}
-        >
-          SetupOps
-        </span>
-        {tagline && (
-          <span
-            className={`hidden border-l pl-2 text-xs font-medium sm:inline ${
-              tone === 'dark' ? 'border-shell-line text-shell-muted' : 'border-line text-fg-subtle'
-            }`}
-          >
-            {tagline}
-          </span>
-        )}
-      </span>
-    </span>
-  );
-}

@@ -47,6 +47,10 @@
   /* Navigation shell */
   --color-sidebar: var(--so-sidebar);
   --color-sidebar-line: var(--so-sidebar-line);
+  --color-sidebar-fg: var(--so-sidebar-fg);
+  --color-sidebar-muted: var(--so-sidebar-muted);
+  --color-sidebar-hover: var(--so-sidebar-hover);
+  --color-sidebar-raised: var(--so-sidebar-raised);
   --color-shell: var(--so-shell);
   --color-shell-fg: var(--so-shell-fg);
   --color-shell-muted: var(--so-shell-muted);
@@ -107,9 +111,13 @@
   --so-danger-fg: #a82323;
   --so-neutral: #5b6573;
 
-  /* Navigation: light side nav under a dark shell bar */
-  --so-sidebar: #ffffff;
-  --so-sidebar-line: #d5dae1;
+  /* Navigation: full-height navy side bar */
+  --so-sidebar: #0f294a;
+  --so-sidebar-line: #1c3d6b;
+  --so-sidebar-fg: #e6eef9;
+  --so-sidebar-muted: #9fb6d6;
+  --so-sidebar-hover: #183862;
+  --so-sidebar-raised: #15345c;
   --so-shell: #1c2533;
   --so-shell-fg: #f3f5f8;
   --so-shell-muted: #a9b4c3;
@@ -165,8 +173,12 @@
   --so-danger-fg: #f08a83;
   --so-neutral: #7d8794;
 
-  --so-sidebar: #13171c;
-  --so-sidebar-line: #2b3139;
+  --so-sidebar: #0b1b31;
+  --so-sidebar-line: #172c4a;
+  --so-sidebar-fg: #dfe8f5;
+  --so-sidebar-muted: #8ea4c4;
+  --so-sidebar-hover: #13284a;
+  --so-sidebar-raised: #102440;
   --so-shell: #0a0d11;
   --so-shell-fg: #e8ebef;
   --so-shell-muted: #8c96a3;
