@@ -1,0 +1,24 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# AI Studio workspace artefacts (screenshots, agent memory)
+.aistudio/
+public/assets/aistudio/
+
+# Local secrets & service accounts
+service-account*.json
+*-firebase-adminsdk-*.json
+
+# Editors / OS
+.vscode/
+.idea/
+Thumbs.db
+
+# Local Claude Code preview config
+.claude/

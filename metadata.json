@@ -1,0 +1,6 @@
+{
+  "name": "SetupOps",
+  "description": "Internal IT workshop platform for device lifecycle, repair tickets, Windows setup checklists, asset labels, and AI diagnostics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

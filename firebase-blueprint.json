@@ -1,0 +1,199 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Authenticated workshop user profile with role and email.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "role": { "type": "string", "enum": ["Admin", "Techniker"] },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "role", "createdAt"]
+    },
+    "UserPublic": {
+      "title": "UserPublic",
+      "description": "Non-PII directory entry for technician assignment and attribution.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "role": { "type": "string", "enum": ["Admin", "Techniker"] },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "role", "createdAt"]
+    },
+    "Device": {
+      "title": "Device",
+      "description": "IT workshop hardware asset tracked from intake to hand-out.",
+      "type": "object",
+      "properties": {
+        "assetTag": { "type": "string", "minLength": 3, "maxLength": 32, "pattern": "^WH-[0-9]{4,}$" },
+        "typ": { "type": "string", "enum": ["Desktop", "Laptop", "Monitor", "Sonstiges"] },
+        "hersteller": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "modell": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "seriennummer": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "cpu": { "type": "string", "maxLength": 120 },
+        "ramGB": { "type": "number" },
+        "speicherTyp": { "type": "string", "enum": ["HDD", "SSD", "NVMe"] },
+        "speicherGB": { "type": "number" },
+        "betriebssystem": { "type": "string", "enum": ["Windows 10", "Windows 11 Pro", "Ubuntu", "Keins"] },
+        "status": { "type": "string", "enum": ["Eingang", "In Arbeit", "Bereit", "Ausgegeben", "Defekt", "Entsorgt"] },
+        "standort": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "notizen": { "type": "string", "maxLength": 4000 },
+        "checklist": { "type": "array" },
+        "handover": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdByName": { "type": "string", "minLength": 1, "maxLength": 120 }
+      },
+      "required": [
+        "assetTag",
+        "typ",
+        "hersteller",
+        "modell",
+        "seriennummer",
+        "speicherTyp",
+        "betriebssystem",
+        "status",
+        "standort",
+        "checklist",
+        "createdAt",
+        "updatedAt",
+        "createdBy",
+        "createdByName"
+      ]
+    },
+    "Ticket": {
+      "title": "Ticket",
+      "description": "Repair or setup ticket linked to a workshop device.",
+      "type": "object",
+      "properties": {
+        "ticketNr": { "type": "string", "minLength": 4, "maxLength": 32, "pattern": "^TCK-[0-9]{4,}$" },
+        "deviceId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "deviceAssetTag": { "type": "string", "minLength": 3, "maxLength": 32 },
+        "deviceModel": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "titel": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "beschreibung": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "kategorie": { "type": "string", "enum": ["Hardware", "Software", "Netzwerk", "Windows-Installation"] },
+        "prioritaet": { "type": "string", "enum": ["Niedrig", "Mittel", "Hoch", "Kritisch"] },
+        "status": { "type": "string", "enum": ["Offen", "In Bearbeitung", "Wartet auf Teile", "Gelöst", "Geschlossen"] },
+        "zugewiesenAn": { "type": "string", "maxLength": 128 },
+        "zugewiesenAnName": { "type": "string", "maxLength": 120 },
+        "loesung": { "type": "string", "maxLength": 5000 },
+        "createdBy": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "closedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "ticketNr",
+        "deviceId",
+        "deviceAssetTag",
+        "deviceModel",
+        "titel",
+        "beschreibung",
+        "kategorie",
+        "prioritaet",
+        "status",
+        "loesung",
+        "createdBy",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "TicketComment": {
+      "title": "TicketComment",
+      "description": "Comment entry inside a ticket thread.",
+      "type": "object",
+      "properties": {
+        "ticketId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "text": { "type": "string", "minLength": 1, "maxLength": 2000 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ticketId", "authorId", "authorName", "text", "createdAt"]
+    },
+    "AuditLog": {
+      "title": "AuditLog",
+      "description": "Immutable change log entry for devices and tickets.",
+      "type": "object",
+      "properties": {
+        "entityType": { "type": "string", "enum": ["device", "ticket"] },
+        "entityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "entityLabel": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "field": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "oldValue": { "type": "string", "maxLength": 500 },
+        "newValue": { "type": "string", "maxLength": 500 },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["entityType", "entityId", "entityLabel", "field", "oldValue", "newValue", "userId", "userName", "timestamp"]
+    },
+    "WorkspaceSettings": {
+      "title": "WorkspaceSettings",
+      "description": "Global workshop configuration: locations, checklist template, and sequence counters.",
+      "type": "object",
+      "properties": {
+        "locations": { "type": "array" },
+        "checklistTemplate": { "type": "array" },
+        "checklistTemplatesByType": { "type": "object" },
+        "nextDeviceSeq": { "type": "number" },
+        "nextTicketSeq": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["locations", "checklistTemplate", "nextDeviceSeq", "nextTicketSeq", "updatedAt"]
+    },
+    "BootstrapMeta": {
+      "title": "BootstrapMeta",
+      "description": "First-admin lock document ensuring only the initial user receives automatic Admin.",
+      "type": "object",
+      "properties": {
+        "adminUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "initializedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["adminUid", "initializedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Private user profiles including email PII and RBAC role."
+    },
+    "/users_public/{userId}": {
+      "schema": { "$ref": "#/entities/UserPublic" },
+      "description": "Public directory of workshop staff for ticket assignment without exposing emails."
+    },
+    "/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/Device" },
+      "description": "Workshop IT devices and their setup checklists."
+    },
+    "/tickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/Ticket" },
+      "description": "Repair and installation tickets linked to devices."
+    },
+    "/tickets/{ticketId}/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/TicketComment" },
+      "description": "Comment thread for a specific ticket."
+    },
+    "/auditLogs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Audit log entries for device and ticket changes."
+    },
+    "/settings/workspace": {
+      "schema": { "$ref": "#/entities/WorkspaceSettings" },
+      "description": "Locations, checklist template, and auto-increment counters."
+    },
+    "/settings/bootstrap": {
+      "schema": { "$ref": "#/entities/BootstrapMeta" },
+      "description": "Immutable record of the first auto-promoted Admin UID."
+    }
+  }
+}

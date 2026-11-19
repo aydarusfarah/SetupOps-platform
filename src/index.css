@@ -1,0 +1,227 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ─── Design tokens ───────────────────────────────────────────────────────────
+ * Components use ONLY these semantic names (bg-surface, text-fg-muted,
+ * border-line, rounded-card …). Raw values live in :root / .dark below, so a
+ * re-theme is a change to this file alone — never to the components.
+ */
+@theme inline {
+  /* Surfaces */
+  --color-canvas: var(--so-canvas);
+  --color-surface: var(--so-surface);
+  --color-subtle: var(--so-subtle);
+  --color-field: var(--so-field);
+  --color-muted: var(--so-muted);
+  --color-accent-soft: var(--so-accent-soft);
+
+  /* Lines */
+  --color-line: var(--so-line);
+  --color-line-subtle: var(--so-line-subtle);
+  --color-line-strong: var(--so-line-strong);
+
+  /* Text */
+  --color-fg: var(--so-fg);
+  --color-fg-muted: var(--so-fg-muted);
+  --color-fg-subtle: var(--so-fg-subtle);
+  --color-accent: var(--so-accent);
+
+  /* Brand & interaction */
+  --color-primary: var(--so-primary);
+  --color-primary-hover: var(--so-primary-hover);
+  --color-on-primary: var(--so-on-primary);
+  --color-focus: var(--so-focus);
+
+  /* Status */
+  --color-success: var(--so-success);
+  --color-success-fg: var(--so-success-fg);
+  --color-success-soft: var(--so-success-soft);
+  --color-warning: var(--so-warning);
+  --color-warning-fg: var(--so-warning-fg);
+  --color-warning-soft: var(--so-warning-soft);
+  --color-danger: var(--so-danger);
+  --color-danger-fg: var(--so-danger-fg);
+  --color-neutral: var(--so-neutral);
+
+  /* Navigation shell */
+  --color-sidebar: var(--so-sidebar);
+  --color-sidebar-line: var(--so-sidebar-line);
+
+  /* Shape */
+  --radius-control: var(--so-radius-control);
+  --radius-input: var(--so-radius-input);
+  --radius-card: var(--so-radius-card);
+  --radius-dialog: var(--so-radius-dialog);
+}
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root {
+  --so-canvas: #e6eef8;
+  --so-surface: #ffffff;
+  --so-subtle: #f3f7fd;
+  --so-field: #ffffff;
+  --so-muted: #ebf2fc;
+  --so-accent-soft: #e8f0fe;
+
+  --so-line: #c8d7ec;
+  --so-line-subtle: #e2eaf5;
+  --so-line-strong: #93b4e4;
+
+  --so-fg: #0f172a;
+  --so-fg-muted: #475569;
+  --so-fg-subtle: #64748b;
+  --so-accent: #1d4ed8;
+
+  --so-primary: #1d4ed8;
+  --so-primary-hover: #1e40af;
+  --so-on-primary: #ffffff;
+  --so-focus: #2563eb;
+
+  --so-success: #16a34a;
+  --so-success-fg: #15803d;
+  --so-success-soft: #dcfce7;
+  --so-warning: #d97706;
+  --so-warning-fg: #b45309;
+  --so-warning-soft: #fef3c7;
+  --so-danger: #dc2626;
+  --so-danger-fg: #b91c1c;
+  --so-neutral: #475569;
+
+  --so-sidebar: #0f294a;
+  --so-sidebar-line: #1c3d6b;
+
+  --so-radius-control: 6px;
+  --so-radius-input: 8px;
+  --so-radius-card: 10px;
+  --so-radius-dialog: 12px;
+
+  color-scheme: light;
+}
+
+.dark {
+  --so-canvas: #07101f;
+  --so-surface: #0f1e36;
+  --so-subtle: #091529;
+  --so-field: #091529;
+  --so-muted: #1e293b;
+  --so-accent-soft: #173056;
+
+  --so-line: #1e3252;
+  --so-line-subtle: #1e3252;
+  --so-line-strong: #2f5386;
+
+  --so-fg: #f1f5f9;
+  --so-fg-muted: #cbd5e1;
+  --so-fg-subtle: #94a3b8;
+  --so-accent: #60a5fa;
+
+  --so-primary: #2563eb;
+  --so-primary-hover: #1d4ed8;
+  --so-on-primary: #ffffff;
+  --so-focus: #3b82f6;
+
+  --so-success: #16a34a;
+  --so-success-fg: #4ade80;
+  --so-success-soft: rgb(20 83 45 / 0.4);
+  --so-warning: #d97706;
+  --so-warning-fg: #fbbf24;
+  --so-warning-soft: rgb(120 53 15 / 0.4);
+  --so-danger: #dc2626;
+  --so-danger-fg: #f87171;
+  --so-neutral: #64748b;
+
+  --so-sidebar: #091529;
+  --so-sidebar-line: #162947;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-fg);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    overscroll-behavior-y: contain;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+.font-mono-code {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes setupops-page-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-page-enter {
+  animation: setupops-page-enter 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-page-enter {
+    animation: none;
+  }
+}
+
+/* Print layout for asset labels & handover receipts */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  #print-label-area,
+  #print-label-area *,
+  #print-handover-area,
+  #print-handover-area * {
+    visibility: visible !important;
+  }
+
+  #print-label-area,
+  #print-handover-area {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

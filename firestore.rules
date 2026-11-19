@@ -1,0 +1,376 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net: default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    // Break-glass admin: a Firebase custom claim `admin: true`, set once via
+    // `npm run set-admin -- <email>` (Admin SDK). No personal data in the rules.
+    function hasAdminClaim() {
+      return isVerified() && request.auth.token.get('admin', false) == true;
+    }
+
+    function isAdmin() {
+      return isVerified() && (
+        hasAdminClaim() ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'Admin')
+      );
+    }
+
+    function isWorkshopMember() {
+      return isVerified() && (
+        hasAdminClaim() ||
+        exists(/databases/$(database)/documents/users/$(request.auth.uid))
+      );
+    }
+
+    function isOwner(uid) {
+      return isVerified() && request.auth.uid == uid;
+    }
+
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'name', 'email', 'role', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'name', 'email', 'role', 'photoURL', 'createdAt']) &&
+        isValidId(data.uid) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 120 &&
+        data.email is string && data.email.size() >= 3 && data.email.size() <= 200 &&
+        data.role in ['Admin', 'Techniker'] &&
+        (!('photoURL' in data) || data.photoURL == null || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidUserPublic(data) {
+      return data.keys().hasAll(['uid', 'name', 'role', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'name', 'role', 'photoURL', 'createdAt']) &&
+        isValidId(data.uid) &&
+        data.name is string && data.name.size() >= 1 && data.name.size() <= 120 &&
+        data.role in ['Admin', 'Techniker'] &&
+        (!('photoURL' in data) || data.photoURL == null || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidBootstrap(data) {
+      return data.keys().hasAll(['adminUid', 'initializedAt']) &&
+        data.keys().hasOnly(['adminUid', 'initializedAt']) &&
+        isValidId(data.adminUid) &&
+        data.initializedAt is timestamp;
+    }
+
+    function isValidWorkspaceSettings(data) {
+      return data.keys().hasAll(['locations', 'checklistTemplate', 'nextDeviceSeq', 'nextTicketSeq', 'updatedAt']) &&
+        data.keys().hasOnly(['locations', 'checklistTemplate', 'checklistTemplatesByType', 'nextDeviceSeq', 'nextTicketSeq', 'updatedAt']) &&
+        data.locations is list && data.locations.size() <= 50 &&
+        (data.locations.size() == 0 || data.locations[0] is string) &&
+        data.checklistTemplate is list && data.checklistTemplate.size() <= 30 &&
+        (data.checklistTemplate.size() == 0 || data.checklistTemplate[0] is string) &&
+        (!('checklistTemplatesByType' in data) || (
+          data.checklistTemplatesByType is map &&
+          data.checklistTemplatesByType.keys().hasOnly(['Desktop', 'Laptop', 'Monitor', 'Sonstiges'])
+        )) &&
+        data.nextDeviceSeq is number && data.nextDeviceSeq >= 1 && data.nextDeviceSeq <= 1000000 &&
+        data.nextTicketSeq is number && data.nextTicketSeq >= 1 && data.nextTicketSeq <= 1000000 &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidHandover(h) {
+      return h == null || (
+        h is map &&
+        h.keys().hasAll(['recipientName', 'department', 'accessories', 'handoverNotes', 'handedOverAt', 'handedOverByUid', 'handedOverByName']) &&
+        h.keys().hasOnly(['recipientName', 'department', 'accessories', 'handoverNotes', 'handedOverAt', 'handedOverByUid', 'handedOverByName']) &&
+        h.recipientName is string && h.recipientName.size() >= 1 && h.recipientName.size() <= 120 &&
+        h.department is string && h.department.size() <= 120 &&
+        h.accessories is string && h.accessories.size() <= 500 &&
+        h.handoverNotes is string && h.handoverNotes.size() <= 1000 &&
+        h.handedOverAt is string && h.handedOverAt.size() >= 1 && h.handedOverAt.size() <= 64 &&
+        isValidId(h.handedOverByUid) &&
+        h.handedOverByName is string && h.handedOverByName.size() >= 1 && h.handedOverByName.size() <= 120
+      );
+    }
+
+    function isValidDevice(data) {
+      return data.keys().hasAll([
+          'assetTag', 'typ', 'hersteller', 'modell', 'seriennummer',
+          'cpu', 'ramGB', 'speicherTyp', 'speicherGB', 'betriebssystem',
+          'status', 'standort', 'notizen', 'checklist',
+          'createdAt', 'updatedAt', 'createdBy', 'createdByName'
+        ]) &&
+        data.keys().hasOnly([
+          'assetTag', 'typ', 'hersteller', 'modell', 'seriennummer',
+          'cpu', 'ramGB', 'speicherTyp', 'speicherGB', 'betriebssystem',
+          'status', 'standort', 'notizen', 'checklist', 'handover',
+          'createdAt', 'updatedAt', 'createdBy', 'createdByName'
+        ]) &&
+        data.assetTag is string && data.assetTag.size() >= 3 && data.assetTag.size() <= 32 && data.assetTag.matches('^WH-[0-9]{4,}$') &&
+        data.typ in ['Desktop', 'Laptop', 'Monitor', 'Sonstiges'] &&
+        data.hersteller is string && data.hersteller.size() >= 1 && data.hersteller.size() <= 80 &&
+        data.modell is string && data.modell.size() >= 1 && data.modell.size() <= 120 &&
+        data.seriennummer is string && data.seriennummer.size() >= 1 && data.seriennummer.size() <= 100 &&
+        data.cpu is string && data.cpu.size() <= 120 &&
+        data.ramGB is number && data.ramGB >= 0 && data.ramGB <= 4096 &&
+        data.speicherTyp in ['HDD', 'SSD', 'NVMe'] &&
+        data.speicherGB is number && data.speicherGB >= 0 && data.speicherGB <= 100000 &&
+        data.betriebssystem in ['Windows 10', 'Windows 11 Pro', 'Ubuntu', 'Keins'] &&
+        data.status in ['Eingang', 'In Arbeit', 'Bereit', 'Ausgegeben', 'Defekt', 'Entsorgt'] &&
+        data.standort is string && data.standort.size() >= 1 && data.standort.size() <= 100 &&
+        data.notizen is string && data.notizen.size() <= 4000 &&
+        data.checklist is list && data.checklist.size() <= 30 &&
+        (data.checklist.size() == 0 || data.checklist[0] is map) &&
+        (!('handover' in data) || isValidHandover(data.handover)) &&
+        isValidId(data.createdBy) &&
+        data.createdByName is string && data.createdByName.size() >= 1 && data.createdByName.size() <= 120 &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidTicket(data) {
+      return data.keys().hasAll([
+          'ticketNr', 'deviceId', 'deviceAssetTag', 'deviceModel',
+          'titel', 'beschreibung', 'kategorie', 'prioritaet', 'status',
+          'zugewiesenAn', 'zugewiesenAnName', 'loesung',
+          'createdBy', 'createdAt', 'updatedAt', 'closedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'ticketNr', 'deviceId', 'deviceAssetTag', 'deviceModel',
+          'titel', 'beschreibung', 'kategorie', 'prioritaet', 'status',
+          'zugewiesenAn', 'zugewiesenAnName', 'loesung',
+          'createdBy', 'createdAt', 'updatedAt', 'closedAt'
+        ]) &&
+        data.ticketNr is string && data.ticketNr.size() >= 4 && data.ticketNr.size() <= 32 && data.ticketNr.matches('^TCK-[0-9]{4,}$') &&
+        isValidId(data.deviceId) &&
+        data.deviceAssetTag is string && data.deviceAssetTag.size() >= 3 && data.deviceAssetTag.size() <= 32 &&
+        data.deviceModel is string && data.deviceModel.size() >= 1 && data.deviceModel.size() <= 160 &&
+        data.titel is string && data.titel.size() >= 1 && data.titel.size() <= 200 &&
+        data.beschreibung is string && data.beschreibung.size() >= 1 && data.beschreibung.size() <= 5000 &&
+        data.kategorie in ['Hardware', 'Software', 'Netzwerk', 'Windows-Installation'] &&
+        data.prioritaet in ['Niedrig', 'Mittel', 'Hoch', 'Kritisch'] &&
+        data.status in ['Offen', 'In Bearbeitung', 'Wartet auf Teile', 'Gelöst', 'Geschlossen'] &&
+        (data.zugewiesenAn == null || isValidId(data.zugewiesenAn)) &&
+        (data.zugewiesenAnName == null || (data.zugewiesenAnName is string && data.zugewiesenAnName.size() <= 120)) &&
+        data.loesung is string && data.loesung.size() <= 5000 &&
+        isValidId(data.createdBy) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp &&
+        (data.closedAt == null || data.closedAt is timestamp);
+    }
+
+    function isValidComment(data) {
+      return data.keys().hasAll(['ticketId', 'authorId', 'authorName', 'text', 'createdAt']) &&
+        data.keys().hasOnly(['ticketId', 'authorId', 'authorName', 'text', 'createdAt']) &&
+        isValidId(data.ticketId) &&
+        isValidId(data.authorId) &&
+        data.authorName is string && data.authorName.size() >= 1 && data.authorName.size() <= 120 &&
+        data.text is string && data.text.size() >= 1 && data.text.size() <= 2000 &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidAuditLog(data) {
+      return data.keys().hasAll(['entityType', 'entityId', 'entityLabel', 'field', 'oldValue', 'newValue', 'userId', 'userName', 'timestamp']) &&
+        data.keys().hasOnly(['entityType', 'entityId', 'entityLabel', 'field', 'oldValue', 'newValue', 'userId', 'userName', 'timestamp']) &&
+        data.entityType in ['device', 'ticket'] &&
+        isValidId(data.entityId) &&
+        data.entityLabel is string && data.entityLabel.size() >= 1 && data.entityLabel.size() <= 64 &&
+        data.field is string && data.field.size() >= 1 && data.field.size() <= 80 &&
+        data.oldValue is string && data.oldValue.size() <= 500 &&
+        data.newValue is string && data.newValue.size() <= 500 &&
+        isValidId(data.userId) &&
+        data.userName is string && data.userName.size() >= 1 && data.userName.size() <= 120 &&
+        data.timestamp is timestamp;
+    }
+
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId) &&
+        isOwner(userId) &&
+        isValidUser(incoming()) &&
+        incoming().uid == userId &&
+        incoming().createdAt == request.time &&
+        (
+          incoming().role == 'Techniker' ||
+          (
+            incoming().role == 'Admin' &&
+            (
+              hasAdminClaim() ||
+              (
+                !exists(/databases/$(database)/documents/settings/bootstrap) &&
+                existsAfter(/databases/$(database)/documents/settings/bootstrap) &&
+                getAfter(/databases/$(database)/documents/settings/bootstrap).data.adminUid == request.auth.uid
+              )
+            )
+          )
+        );
+      allow update: if isValidId(userId) &&
+        isVerified() &&
+        isValidUser(incoming()) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['role', 'name', 'photoURL'])) ||
+          (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'photoURL']))
+        );
+      allow delete: if false;
+    }
+
+    match /users_public/{userId} {
+      allow get: if isValidId(userId) && isVerified();
+      allow list: if isWorkshopMember();
+      allow create: if isValidId(userId) &&
+        isOwner(userId) &&
+        isValidUserPublic(incoming()) &&
+        incoming().uid == userId &&
+        incoming().createdAt == request.time &&
+        existsAfter(/databases/$(database)/documents/users/$(userId)) &&
+        incoming().role == getAfter(/databases/$(database)/documents/users/$(userId)).data.role;
+      allow update: if isValidId(userId) &&
+        isVerified() &&
+        isValidUserPublic(incoming()) &&
+        incoming().uid == existing().uid &&
+        incoming().createdAt == existing().createdAt &&
+        (
+          (isAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['role', 'name', 'photoURL'])) ||
+          (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'photoURL']))
+        );
+      allow delete: if false;
+    }
+
+    match /settings/bootstrap {
+      allow get: if isVerified();
+      allow list: if false;
+      allow create: if isVerified() &&
+        isValidBootstrap(incoming()) &&
+        incoming().adminUid == request.auth.uid &&
+        incoming().initializedAt == request.time &&
+        !exists(/databases/$(database)/documents/settings/bootstrap);
+      allow update, delete: if false;
+    }
+
+    match /settings/workspace {
+      allow get: if isVerified();
+      allow list: if false;
+      allow create: if isWorkshopMember() &&
+        isValidWorkspaceSettings(incoming()) &&
+        incoming().updatedAt == request.time;
+      allow update: if isWorkshopMember() &&
+        isValidWorkspaceSettings(incoming()) &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (incoming().diff(existing()).affectedKeys().hasOnly(['nextDeviceSeq', 'updatedAt']) && incoming().nextDeviceSeq >= existing().nextDeviceSeq) ||
+          (incoming().diff(existing()).affectedKeys().hasOnly(['nextTicketSeq', 'updatedAt']) && incoming().nextTicketSeq >= existing().nextTicketSeq) ||
+          (incoming().diff(existing()).affectedKeys().hasOnly(['nextDeviceSeq', 'nextTicketSeq', 'updatedAt']) && incoming().nextDeviceSeq >= existing().nextDeviceSeq && incoming().nextTicketSeq >= existing().nextTicketSeq)
+        );
+      allow delete: if false;
+    }
+
+    match /devices/{deviceId} {
+      allow get: if isValidId(deviceId) && isVerified();
+      allow list: if isWorkshopMember();
+      allow create: if isValidId(deviceId) &&
+        isWorkshopMember() &&
+        isValidDevice(incoming()) &&
+        incoming().createdBy == request.auth.uid &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time;
+      allow update: if isValidId(deviceId) &&
+        isWorkshopMember() &&
+        isValidDevice(incoming()) &&
+        incoming().createdBy == existing().createdBy &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['typ', 'hersteller', 'modell', 'seriennummer', 'cpu', 'ramGB', 'speicherTyp', 'speicherGB', 'betriebssystem', 'status', 'standort', 'notizen', 'checklist', 'handover', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['checklist', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['checklist', 'status', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['handover', 'status', 'updatedAt']) ||
+          incoming().diff(existing()).affectedKeys().hasOnly(['handover', 'status', 'standort', 'updatedAt'])
+        );
+      allow delete: if isValidId(deviceId) && isAdmin();
+    }
+
+    match /tickets/{ticketId} {
+      allow get: if isValidId(ticketId) && isVerified();
+      allow list: if isWorkshopMember();
+      allow create: if isValidId(ticketId) &&
+        isWorkshopMember() &&
+        isValidTicket(incoming()) &&
+        incoming().createdBy == request.auth.uid &&
+        incoming().createdAt == request.time &&
+        incoming().updatedAt == request.time &&
+        exists(/databases/$(database)/documents/devices/$(incoming().deviceId));
+      allow update: if isValidId(ticketId) &&
+        isWorkshopMember() &&
+        isValidTicket(incoming()) &&
+        incoming().createdBy == existing().createdBy &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().ticketNr == existing().ticketNr &&
+        incoming().updatedAt == request.time &&
+        (
+          isAdmin() ||
+          (
+            existing().status != 'Geschlossen' &&
+            (
+              incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt', 'closedAt']) ||
+              incoming().diff(existing()).affectedKeys().hasOnly(['prioritaet', 'updatedAt']) ||
+              incoming().diff(existing()).affectedKeys().hasOnly(['zugewiesenAn', 'zugewiesenAnName', 'updatedAt']) ||
+              incoming().diff(existing()).affectedKeys().hasOnly(['loesung', 'updatedAt']) ||
+              incoming().diff(existing()).affectedKeys().hasOnly(['titel', 'beschreibung', 'kategorie', 'prioritaet', 'status', 'zugewiesenAn', 'zugewiesenAnName', 'loesung', 'updatedAt', 'closedAt'])
+            )
+          )
+        );
+      allow delete: if isValidId(ticketId) && isAdmin();
+
+      match /comments/{commentId} {
+        allow get: if isValidId(ticketId) && isValidId(commentId) && isVerified();
+        allow list: if isValidId(ticketId) && isWorkshopMember();
+        allow create: if isValidId(ticketId) &&
+          isValidId(commentId) &&
+          isWorkshopMember() &&
+          isValidComment(incoming()) &&
+          incoming().ticketId == ticketId &&
+          incoming().authorId == request.auth.uid &&
+          incoming().createdAt == request.time &&
+          exists(/databases/$(database)/documents/tickets/$(ticketId));
+        allow update: if false;
+        allow delete: if isValidId(ticketId) && isValidId(commentId) && isAdmin();
+      }
+    }
+
+    match /auditLogs/{logId} {
+      allow get: if isValidId(logId) && isVerified();
+      allow list: if isWorkshopMember();
+      allow create: if isValidId(logId) &&
+        isWorkshopMember() &&
+        isValidAuditLog(incoming()) &&
+        incoming().userId == request.auth.uid &&
+        incoming().timestamp == request.time;
+      allow update: if false;
+      allow delete: if isValidId(logId) && isAdmin();
+    }
+  }
+}
