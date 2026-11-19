@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.github
+.claude
+.aistudio
+docs
+public/assets/aistudio
+.env*
+!.env.example
+service-account*.json
+*.log
+coverage

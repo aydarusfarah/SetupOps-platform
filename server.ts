@@ -231,7 +231,7 @@ app.post('/api/diagnose', async (req, res) => {
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         response = await ai.models.generateContent({
-          model: 'gemini-4-hydrogen',
+          model: process.env.GEMINI_MODEL || 'gemini-4-hydrogen',
           contents: prompt,
           config: {
             systemInstruction: isEn

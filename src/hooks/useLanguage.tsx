@@ -12,6 +12,11 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 const STORAGE_KEY = 'setupops_lang';
 
 function detectInitialLanguage(): Language {
+  // Priority: ?lang= link parameter > saved choice > browser language.
+  if (typeof window !== 'undefined') {
+    const fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (fromUrl === 'de' || fromUrl === 'en') return fromUrl;
+  }
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved === 'de' || saved === 'en') return saved;
