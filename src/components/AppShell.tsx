@@ -148,6 +148,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </span>
     );
 
+  const toggleLabel = collapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar');
+
+  /** Icon-only collapse/expand button with a styled tooltip to its right. */
+  const collapseToggle = (
+    <button
+      type="button"
+      onClick={() => setCollapsed((prev) => !prev)}
+      aria-label={toggleLabel}
+      aria-expanded={!collapsed}
+      className="group relative flex h-8 w-8 shrink-0 items-center justify-center rounded-input text-sidebar-muted ring-1 ring-sidebar-line transition-colors hover:bg-sidebar-hover hover:text-white hover:ring-transparent focus-visible:outline-2 focus-visible:outline-white/70"
+    >
+      {collapsed ? <PanelLeftOpen className="h-[18px] w-[18px]" /> : <PanelLeftClose className="h-[18px] w-[18px]" />}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-full z-50 ml-3 -translate-x-1 -translate-y-1/2 rounded-control bg-slate-950 px-2.5 py-1.5 text-xs font-medium whitespace-nowrap text-white opacity-0 shadow-lg ring-1 ring-white/10 transition-[opacity,transform] duration-150 group-hover:translate-x-0 group-hover:opacity-100 group-hover:delay-200 group-focus-visible:translate-x-0 group-focus-visible:opacity-100"
+      >
+        <span className="absolute top-1/2 -left-1 h-2 w-2 -translate-y-1/2 rotate-45 bg-slate-950" />
+        <span className="relative">{toggleLabel}</span>
+      </span>
+    </button>
+  );
+
   /** Navy side bar content, shared by the desktop rail and the mobile drawer. */
   const sidebar = (isMobile: boolean) => {
     const iconOnly = !isMobile && collapsed;
@@ -167,6 +189,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <BrandMark className="h-8 w-8" />
             {!iconOnly && <span className="text-[17px] font-semibold tracking-tight text-white">SetupOps</span>}
           </Link>
+          {!isMobile && !collapsed && collapseToggle}
           {isMobile && (
             <button
               type="button"
@@ -178,6 +201,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           )}
         </div>
+
+        {/* Collapsed rail: expand button sits right under the logo */}
+        {iconOnly && (
+          <div className="flex shrink-0 justify-center border-b border-sidebar-line py-3">{collapseToggle}</div>
+        )}
 
         {/* Navigation */}
         <nav aria-label={t('shell.mainNavigation')} className="flex flex-1 flex-col gap-1 overflow-y-auto px-3 py-4">
@@ -222,25 +250,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             )}
           </div>
         </div>
-
-        {/* Collapse toggle — always the very last element */}
-        {!isMobile && (
-          <div className="shrink-0 border-t border-sidebar-line p-2">
-            <button
-              type="button"
-              onClick={() => setCollapsed((prev) => !prev)}
-              aria-label={collapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar')}
-              aria-expanded={!collapsed}
-              title={collapsed ? t('shell.expandSidebar') : t('shell.collapseSidebar')}
-              className={`flex h-9 w-full items-center gap-2.5 rounded-input text-[13px] font-medium text-sidebar-muted transition-colors hover:bg-sidebar-hover hover:text-white focus-visible:outline-2 focus-visible:outline-white/70 ${
-                collapsed ? 'justify-center' : 'px-3'
-              }`}
-            >
-              {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
-              {!collapsed && <span>{t('shell.collapseSidebar')}</span>}
-            </button>
-          </div>
-        )}
       </div>
     );
   };
@@ -249,7 +258,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="flex min-h-screen bg-canvas text-fg">
       {/* Side bar (desktop) */}
       <aside
-        className={`no-print sticky top-0 hidden h-screen shrink-0 transition-[width] duration-200 ease-out md:block ${
+        className={`no-print sticky top-0 z-40 hidden h-screen shrink-0 transition-[width] duration-200 ease-out md:block ${
           collapsed ? 'w-[72px]' : 'w-64'
         }`}
       >
