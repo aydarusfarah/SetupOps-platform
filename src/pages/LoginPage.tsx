@@ -8,11 +8,7 @@ import { LanguageSwitch } from '../components/ui/LanguageSwitch';
 
 const REPO_URL = 'https://github.com/aydarusfarah/SetupOps-platform';
 
-const HIGHLIGHTS: Array<{ title: MessageKey; text: MessageKey }> = [
-  { title: 'login.featureLifecycleTitle', text: 'login.featureLifecycleText' },
-  { title: 'login.featureSetupTitle', text: 'login.featureSetupText' },
-  { title: 'login.featureAiTitle', text: 'login.featureAiText' },
-];
+const HIGHLIGHTS: MessageKey[] = ['login.featureLifecycleTitle', 'login.featureSetupTitle', 'login.featureAiTitle'];
 
 function GoogleIcon() {
   return (
@@ -86,7 +82,7 @@ export function LoginPage() {
         />
 
         {/* Content column: capped width, centred on very wide screens */}
-        <div className="relative mx-auto flex min-h-0 w-full max-w-[640px] flex-1 flex-col px-6 pt-8 pb-10 sm:px-10 lg:py-12 xl:px-12">
+        <div className="relative mx-auto flex min-h-0 w-full max-w-[720px] flex-1 flex-col px-6 pt-8 pb-10 sm:px-10 lg:py-10 xl:px-12">
           <div className="flex items-center gap-2.5">
             <span className="rounded-input bg-white p-[3px] shadow-sm">
               <BrandMark className="h-7 w-7" />
@@ -94,33 +90,31 @@ export function LoginPage() {
             <span className="text-[17px] font-semibold tracking-tight">SetupOps</span>
           </div>
 
-          <div className="flex min-h-0 flex-1 flex-col justify-center gap-9 pt-12">
+          <div className="flex min-h-0 flex-1 flex-col justify-center gap-8 pt-10 lg:pt-8">
           <div className="shrink-0">
             <p className="text-xs font-semibold tracking-[0.12em] text-white/70 uppercase">
               {t('login.eyebrow')}
             </p>
-            <h1 className="mt-3 max-w-[18ch] text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-balance sm:text-[32px] xl:text-[36px]">
+            <h1 className="mt-3 max-w-[22ch] text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-balance sm:text-[32px] xl:text-[36px]">
               {t('login.heroTitle')}
             </h1>
-            <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-white/75">{t('login.heroText')}</p>
+            <p className="mt-3 max-w-[48ch] text-[15px] leading-relaxed text-white/75">{t('login.heroTextShort')}</p>
 
-            <ul className="mt-7 hidden gap-y-4 sm:grid">
-              {HIGHLIGHTS.map(({ title, text }) => (
-                <li key={title} className="flex gap-3">
-                  <span className="mt-[3px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/35">
-                    <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-white">{t(title)}</p>
-                    <p className="mt-0.5 max-w-[48ch] text-[13px] leading-relaxed text-white/70">{t(text)}</p>
-                  </div>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {HIGHLIGHTS.map((title) => (
+                <li
+                  key={title}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-[13px] font-medium text-white ring-1 ring-white/25"
+                >
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} aria-hidden="true" />
+                  {t(title)}
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Product preview: shrinks with the space left (container units), never cropped; hidden on short screens */}
-          <figure className="relative hidden h-[400px] max-h-full min-h-0 shrink [container-type:size] tall:block">
+          {/* Product preview: as large as the space allows (container units), never cropped; hidden only if tiny */}
+          <figure className="relative hidden h-[480px] max-h-full min-h-0 shrink [container-type:size] lg:block">
             <div className="absolute top-0 left-0 w-[min(100cqw,calc((100cqh-30px)*1.6529))] [@container(max-height:200px)]:hidden overflow-hidden rounded-dialog bg-white shadow-[0_24px_48px_-12px_rgb(3_20_45/0.55),0_0_0_1px_rgb(255_255_255/0.25)]">
               <div className="flex h-[30px] items-center gap-1.5 border-b border-line bg-subtle px-3" aria-hidden="true">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />

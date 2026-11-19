@@ -517,13 +517,9 @@ export const en = {
 
   // ── login (split screen) ──
   "login.heroTitle": "Every device, from intake to handover.",
-  "login.heroText": "SetupOps is the operations hub for IT workshops: track hardware, run standardised Windows setups and resolve repair tickets in one place.",
   "login.featureLifecycleTitle": "Device lifecycle",
-  "login.featureLifecycleText": "Asset tags, QR labels, status tracking and signed handovers.",
   "login.featureSetupTitle": "Setup checklists",
-  "login.featureSetupText": "Type-specific templates so every machine leaves the bench the same way.",
   "login.featureAiTitle": "AI-assisted diagnostics",
-  "login.featureAiText": "Probable root causes and step-by-step checks for every repair ticket.",
   "login.exploreDemo": "Explore the demo workspace",
   "login.exploreDemoHint": "No sign-in needed · sample data stays in your browser",
 
@@ -609,6 +605,9 @@ export const en = {
 
   // ── login (eyebrow) ──
   "login.eyebrow": "IT workshop operations",
+
+  // ── login (compact hero) ──
+  "login.heroTextShort": "Track hardware, standardise Windows setups and resolve repair tickets — in one place.",
 } as const;
 
 export type MessageKey = keyof typeof en;

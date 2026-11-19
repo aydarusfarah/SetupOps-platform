@@ -518,14 +518,10 @@ export const de: Messages = {
   "shell.breadcrumb": "Brotkrumen-Navigation",
 
   // ── login (split screen) ──
-  "login.heroTitle": "Jedes Gerät – vom Wareneingang bis zur Übergabe.",
-  "login.heroText": "SetupOps ist die Betriebszentrale für IT-Werkstätten: Hardware verwalten, Windows-Einrichtungen standardisiert durchführen und Reparaturtickets an einem Ort lösen.",
+  "login.heroTitle": "Jedes Gerät – vom Eingang bis zur Übergabe.",
   "login.featureLifecycleTitle": "Geräte-Lebenszyklus",
-  "login.featureLifecycleText": "Asset-Tags, QR-Etiketten, Statusverfolgung und unterschriebene Übergaben.",
   "login.featureSetupTitle": "Einrichtungs-Checklisten",
-  "login.featureSetupText": "Typspezifische Vorlagen, damit jedes Gerät die Werkbank gleich verlässt.",
   "login.featureAiTitle": "KI-gestützte Fehlerdiagnose",
-  "login.featureAiText": "Wahrscheinliche Ursachen und strukturierte Prüfschritte für jedes Reparaturticket.",
   "login.exploreDemo": "Demo-Arbeitsbereich ansehen",
   "login.exploreDemoHint": "Keine Anmeldung nötig · Beispieldaten bleiben im Browser",
 
@@ -611,4 +607,7 @@ export const de: Messages = {
 
   // ── login (eyebrow) ──
   "login.eyebrow": "IT-Werkstatt-Betrieb",
+
+  // ── login (compact hero) ──
+  "login.heroTextShort": "Hardware verwalten, Windows-Einrichtungen standardisieren und Reparaturtickets lösen – an einem Ort.",
 };

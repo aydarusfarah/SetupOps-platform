@@ -1,7 +1,5 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
-/* Desktop with enough height for decorative content (e.g. sign-in product preview). */
-@custom-variant tall (@media (min-width: 64rem) and (min-height: 820px));
 
 /*
  * ─── Design tokens ───────────────────────────────────────────────────────────
