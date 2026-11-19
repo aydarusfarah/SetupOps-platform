@@ -6,7 +6,8 @@ built SPA from `dist/` and the `/api/diagnose` endpoint. Data lives in **Cloud F
 
 ```
 GitHub (manual "Deploy" workflow) ──► Cloud Build ──► Cloud Run service "setupops"
-                                                         │  GEMINI_API_KEY from Secret Manager
+                                                         │  runs as service account setupops-run
+                                                         └─► Gemini on Vertex AI (no API key)
 Browser ──► Cloud Run URL ──► SPA ──► Firebase Auth / Firestore (security rules)
 ```
 
@@ -29,26 +30,47 @@ firebase deploy --only firestore
 `firebase.json` targets the named Firestore database from `firebase-applet-config.json`. Redeploy whenever
 `firestore.rules` changes — the rules are the authorization layer.
 
-## 2 · Gemini API key → Secret Manager
+## 2 · Service account for the app (keyless Gemini)
+
+The server calls Gemini through **Vertex AI** with the identity of a dedicated service account — there is no
+API key to store, rotate or leak. (New Google Cloud organizations block API-key creation by default; this
+approach works with that policy.)
 
 ```bash
-gcloud services enable secretmanager.googleapis.com run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com
-printf '%s' "<your-gemini-api-key>" | gcloud secrets create gemini-api-key --data-file=-
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com artifactregistry.googleapis.com aiplatform.googleapis.com
+gcloud iam service-accounts create setupops-run --display-name "SetupOps Cloud Run runtime"
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member "serviceAccount:setupops-run@$PROJECT_ID.iam.gserviceaccount.com" \
+  --role roles/aiplatform.user
 ```
 
-## 3 · First deploy (from your machine)
+**New Google Cloud accounts:** organizations created with secure-by-default policies no longer give the default
+compute service account (used by Cloud Build for `--source` deploys) any roles. Grant it the builder role once:
+
+```bash
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format 'value(projectNumber)')
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member "serviceAccount:$PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role roles/run.builder
+```
+
+The runtime account gets only `roles/aiplatform.user`. Firestore access happens in the browser with the signed-in
+user's identity and is governed by the security rules, so the server needs no database rights.
+
+## 3 · Deploy (from your machine)
 
 ```bash
 gcloud run deploy setupops \
   --source . \
   --region "$REGION" \
+  --service-account "setupops-run@$PROJECT_ID.iam.gserviceaccount.com" \
+  --set-env-vars "VERTEX_PROJECT=$PROJECT_ID,VERTEX_LOCATION=global" \
   --allow-unauthenticated \
-  --memory 512Mi --max-instances 3 \
-  --set-secrets GEMINI_API_KEY=gemini-api-key:latest
+  --memory 512Mi --max-instances 3
 ```
 
-Grant the Cloud Run runtime service account access to the secret if prompted
-(`roles/secretmanager.secretAccessor`). The command prints the service URL.
+The command builds the Dockerfile with Cloud Build and prints the service URL. Alternatively set
+`GEMINI_API_KEY` (e.g. via `--set-secrets`) to use the Gemini Developer API with a key instead.
 
 ## 4 · Allow Google sign-in on the new domain
 
@@ -68,7 +90,7 @@ Run workflow*) using **Workload Identity Federation** — no long-lived service-
 gcloud iam service-accounts create github-deployer
 SA="github-deployer@$PROJECT_ID.iam.gserviceaccount.com"
 for role in roles/run.admin roles/cloudbuild.builds.editor roles/artifactregistry.admin \
-            roles/storage.admin roles/iam.serviceAccountUser roles/secretmanager.secretAccessor; do
+            roles/storage.admin roles/iam.serviceAccountUser; do
   gcloud projects add-iam-policy-binding "$PROJECT_ID" --member "serviceAccount:$SA" --role "$role"
 done
 
@@ -109,4 +131,4 @@ The user has to sign out and in again for the claim to take effect. Never commit
 ## Costs
 
 With `--max-instances 3` and scale-to-zero, a portfolio/demo deployment stays within the Cloud Run and Firestore
-free tiers in typical use. Gemini calls are capped per visitor by `DIAGNOSE_RATE_LIMIT`.
+free tiers in typical use. Gemini calls (billed through Vertex AI) are capped per visitor by `DIAGNOSE_RATE_LIMIT`.

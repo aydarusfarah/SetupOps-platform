@@ -14,7 +14,7 @@
 ![i18n](https://img.shields.io/badge/UI-English%20%C2%B7%20Deutsch-555)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-<img src="docs/screenshots/dashboard-light.png" alt="SetupOps dashboard" width="900" />
+<a href="https://setupops-381257383993.europe-west3.run.app/?autostart=1"><img src="docs/screenshots/dashboard-light.png" alt="SetupOps dashboard — open the live demo" width="900" /></a>
 
 </div>
 
@@ -27,8 +27,9 @@ an **asset list** in a spreadsheet, **repair tickets** in a mail inbox, and **se
 SetupOps connects them: every device has a lifecycle, every ticket is tied to a device, and every setup
 follows the same checklist — with an audit trail and SLA tracking on top.
 
-> **Try it without an account:** open the app and choose **Explore the demo workspace**.
-> The demo runs entirely in your browser with sample data; nothing is saved.
+> **Live demo: [setupops-381257383993.europe-west3.run.app](https://setupops-381257383993.europe-west3.run.app/?autostart=1)**
+> — opens the demo workspace directly, no account needed. It runs entirely in your browser with sample data;
+> nothing is saved. (German UI: append `&lang=de`, dark mode: `&theme=dark`.)
 
 ## Features
 
@@ -76,14 +77,15 @@ flowchart LR
     API["Express server<br/>rate limit · validation"] --> Static["serves dist/"]
   end
 
-  API -->|server-side key| Gemini["Gemini API"]
+  API -->|service-account identity| Gemini["Gemini on Vertex AI"]
 ```
 
 - **The browser talks to Firestore directly.** Authorization is enforced by [`firestore.rules`](firestore.rules), not by the client:
   strict schemas (`hasOnly`), immutable `createdAt`/`createdBy`, admin-only deletes, verified e-mail required.
   The threat model and the twelve rejected attack payloads are documented in [`security_spec.md`](security_spec.md).
-- **The Gemini key never reaches the browser.** `/api/diagnose` runs on the server, validates input and is
-  rate-limited per client IP (the endpoint is reachable from the public demo).
+- **No AI credentials in the browser — and none at all in production.** `/api/diagnose` runs on the server,
+  validates input and is rate-limited per client IP. On Cloud Run it calls Gemini through Vertex AI with the
+  service account's identity, so there is no API key that could leak.
 - **Roles.** The first user to sign in becomes Admin (atomic bootstrap document); everyone after that is a Technician.
   A break-glass `admin` custom claim can be granted with `npm run set-admin -- <email>` — no personal data in the rules.
 - **Audit trail.** Every device and ticket change writes an audit entry; history views translate the stored entries
@@ -116,7 +118,7 @@ active theme through CSS variables.
 
 ```bash
 npm ci
-cp .env.example .env        # add GEMINI_API_KEY for AI diagnostics
+cp .env.example .env        # optional: GEMINI_API_KEY for AI diagnostics
 npm run dev                 # http://localhost:3000
 ```
 
@@ -140,7 +142,8 @@ access is controlled by the security rules). Point it at your own project to run
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `GEMINI_API_KEY` | — | Required for AI diagnostics |
+| `GEMINI_API_KEY` | — | AI diagnostics via the Gemini API (local development) |
+| `VERTEX_PROJECT` / `VERTEX_LOCATION` | — / `global` | Keyless AI diagnostics via Vertex AI and the service account (production) |
 | `GEMINI_MODEL` | `gemini-4-hydrogen` | Model used by `/api/diagnose` |
 | `DIAGNOSE_RATE_LIMIT` | `10` | AI requests per client IP per 10 minutes |
 | `PORT` | `3000` | HTTP port (Cloud Run injects `8080`) |
@@ -157,9 +160,9 @@ access is controlled by the security rules). Point it at your own project to run
 
 ## Deployment
 
-One container on **Google Cloud Run** serves the app and the API; Firestore rules and indexes deploy with the
-Firebase CLI. Step-by-step instructions, including keyless GitHub → Google Cloud authentication and storing the
-Gemini key in Secret Manager: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
+One container on **Google Cloud Run** serves the app and the API; Gemini is reached keylessly through Vertex AI,
+and Firestore rules and indexes deploy with the Firebase CLI. Step-by-step instructions, including keyless
+GitHub → Google Cloud authentication: **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)**.
 
 ## Tech stack
 

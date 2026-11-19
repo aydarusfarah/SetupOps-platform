@@ -33,9 +33,12 @@ jobs:
           region: ${{ env.REGION }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           source: .
-          flags: --allow-unauthenticated --memory=512Mi --max-instances=3
-          secrets: |-
-            GEMINI_API_KEY=gemini-api-key:latest
+          flags: >-
+            --allow-unauthenticated --memory=512Mi --max-instances=3
+            --service-account=setupops-run@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
+          env_vars: |-
+            VERTEX_PROJECT=${{ secrets.GCP_PROJECT_ID }}
+            VERTEX_LOCATION=global
 
       - name: Smoke test
         run: curl --fail --silent --show-error "${{ steps.deploy.outputs.url }}/" > /dev/null

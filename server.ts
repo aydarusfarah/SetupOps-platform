@@ -18,6 +18,29 @@ const diagnoseLimiter = createRateLimiter({
   windowMs: 10 * 60_000,
 });
 
+/**
+ * Gemini client. Two modes:
+ *  - GEMINI_API_KEY set → Gemini Developer API with that key (local development).
+ *  - VERTEX_PROJECT set → Vertex AI via Application Default Credentials: on Cloud Run
+ *    the service account authenticates, so no API key exists that could leak.
+ * Returns null when neither is configured.
+ */
+function createGeminiClient(): GoogleGenAI | null {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (apiKey && apiKey !== 'MY_GEMINI_API_KEY') {
+    return new GoogleGenAI({ apiKey });
+  }
+  const project = process.env.VERTEX_PROJECT;
+  if (project) {
+    return new GoogleGenAI({
+      vertexai: true,
+      project,
+      location: process.env.VERTEX_LOCATION || 'global',
+    });
+  }
+  return null;
+}
+
 interface DiagnoseRequestBody {
   lang?: 'de' | 'en';
   ticket?: {
@@ -87,24 +110,15 @@ app.post('/api/diagnose', async (req, res) => {
       return;
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey === 'MY_GEMINI_API_KEY') {
+    const ai = createGeminiClient();
+    if (!ai) {
       res.status(503).json({
         error: isEn
-          ? 'No valid GEMINI_API_KEY configured on the server. Please configure the key in Secrets.'
-          : 'Kein gültiger GEMINI_API_KEY auf dem Server konfiguriert. Bitte hinterlegen Sie den Schlüssel in den Secrets.',
+          ? 'AI diagnostics are not configured on this server (set GEMINI_API_KEY or VERTEX_PROJECT).'
+          : 'Die KI-Diagnose ist auf diesem Server nicht konfiguriert (GEMINI_API_KEY oder VERTEX_PROJECT setzen).',
       });
       return;
     }
-
-    const ai = new GoogleGenAI({
-      apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        },
-      },
-    });
 
     const deviceInfo = device
       ? isEn
