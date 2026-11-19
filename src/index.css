@@ -142,56 +142,57 @@
 }
 
 .dark {
-  --so-canvas: #0f1216;
-  --so-surface: #171b21;
-  --so-subtle: #13171c;
-  --so-field: #12161b;
-  --so-muted: #232931;
-  --so-accent-soft: #15263c;
+  /* Navy dark palette (matches the sidebar): deep navy canvas, navy cards. */
+  --so-canvas: #07101f;
+  --so-surface: #0f1e36;
+  --so-subtle: #0b1a30;
+  --so-field: #091529;
+  --so-muted: #1a2d4d;
+  --so-accent-soft: #173056;
 
-  --so-line: #2b3139;
-  --so-line-subtle: #22272e;
-  --so-line-strong: #3d4550;
+  --so-line: #1e3252;
+  --so-line-subtle: #182a47;
+  --so-line-strong: #2f5386;
 
-  --so-fg: #e8ebef;
-  --so-fg-muted: #b5bdc8;
-  --so-fg-subtle: #8c96a3;
-  --so-accent: #64a8f2;
+  --so-fg: #f1f5f9;
+  --so-fg-muted: #cbd5e1;
+  --so-fg-subtle: #94a3b8;
+  --so-accent: #60a5fa;
 
-  --so-primary: #1f6fc5;
-  --so-primary-hover: #2a7fd8;
+  --so-primary: #2563eb;
+  --so-primary-hover: #3b82f6;
   --so-on-primary: #ffffff;
-  --so-focus: #64a8f2;
+  --so-focus: #3b82f6;
 
-  --so-success: #2f9e55;
-  --so-success-fg: #5cc581;
-  --so-success-soft: rgb(47 158 85 / 0.16);
-  --so-warning: #d98a1f;
-  --so-warning-fg: #f0b257;
-  --so-warning-soft: rgb(217 138 31 / 0.16);
-  --so-danger: #d9473f;
-  --so-danger-fg: #f08a83;
-  --so-neutral: #7d8794;
+  --so-success: #22c55e;
+  --so-success-fg: #4ade80;
+  --so-success-soft: rgb(34 197 94 / 0.14);
+  --so-warning: #f59e0b;
+  --so-warning-fg: #fbbf24;
+  --so-warning-soft: rgb(245 158 11 / 0.14);
+  --so-danger: #ef4444;
+  --so-danger-fg: #f87171;
+  --so-neutral: #64748b;
 
-  --so-sidebar: #0b1b31;
-  --so-sidebar-line: #172c4a;
-  --so-sidebar-fg: #dfe8f5;
-  --so-sidebar-muted: #8ea4c4;
-  --so-sidebar-hover: #13284a;
-  --so-sidebar-raised: #102440;
-  --so-shell: #0a0d11;
-  --so-shell-fg: #e8ebef;
-  --so-shell-muted: #8c96a3;
-  --so-shell-line: #22272e;
-  --so-shell-hover: #1c2129;
+  --so-sidebar: #0f1e36;
+  --so-sidebar-line: #1e3252;
+  --so-sidebar-fg: #e2e8f0;
+  --so-sidebar-muted: #94a3b8;
+  --so-sidebar-hover: #173056;
+  --so-sidebar-raised: #152846;
+  --so-shell: #091529;
+  --so-shell-fg: #f1f5f9;
+  --so-shell-muted: #94a3b8;
+  --so-shell-line: #1e3252;
+  --so-shell-hover: #173056;
 
-  --so-chart-1: #4f95e3;
-  --so-chart-2: #3fae64;
-  --so-chart-3: #e09a3a;
-  --so-chart-4: #e5625a;
-  --so-chart-5: #8c96a3;
-  --so-chart-6: #c9d1db;
-  --so-chart-7: #4a5361;
+  --so-chart-1: #3b82f6;
+  --so-chart-2: #22c55e;
+  --so-chart-3: #f59e0b;
+  --so-chart-4: #f87171;
+  --so-chart-5: #94a3b8;
+  --so-chart-6: #e2e8f0;
+  --so-chart-7: #475569;
 
   color-scheme: dark;
 }
