@@ -606,6 +606,9 @@ export const en = {
   "login.orSignIn": "or sign in to your workspace",
   "login.previewAlt": "SetupOps dashboard with fleet KPIs, ticket velocity chart and the technician work queue",
   "login.viewSource": "View source on GitHub",
+
+  // ── login (eyebrow) ──
+  "login.eyebrow": "IT workshop operations",
 } as const;
 
 export type MessageKey = keyof typeof en;

@@ -608,4 +608,7 @@ export const de: Messages = {
   "login.orSignIn": "oder bei Ihrem Arbeitsbereich anmelden",
   "login.previewAlt": "SetupOps-Dashboard mit Bestandskennzahlen, Ticket-Durchsatz und Arbeitsliste der Techniker",
   "login.viewSource": "Quellcode auf GitHub",
+
+  // ── login (eyebrow) ──
+  "login.eyebrow": "IT-Werkstatt-Betrieb",
 };

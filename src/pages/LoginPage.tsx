@@ -73,71 +73,76 @@ export function LoginPage() {
       {/* ── Brand panel ─────────────────────────────────────────────── */}
       <section
         aria-label={t('login.productOverview')}
-        className="relative flex min-h-0 flex-col overflow-hidden bg-[linear-gradient(150deg,#0b5cb8_0%,#0a4f9e_55%,#083d7c_100%)] px-6 pt-8 pb-10 text-white sm:px-10 lg:px-14 lg:pt-12 lg:pb-0"
+        className="relative flex min-h-0 flex-col overflow-hidden bg-[linear-gradient(150deg,#0b5cb8_0%,#0a4f9e_55%,#083d7c_100%)] text-white"
       >
         {/* subtle dot grid + glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.12] [background-image:radial-gradient(rgb(255_255_255/0.9)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
+          className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(rgb(255_255_255/0.9)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_bottom,black,transparent_70%)]"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-white/10 blur-3xl"
+          className="pointer-events-none absolute -top-48 -right-48 h-[28rem] w-[28rem] rounded-full bg-white/10 blur-3xl"
         />
 
-        <div className="relative flex items-center gap-2.5">
-          <span className="rounded-input bg-white/95 p-0.5 shadow-sm">
-            <BrandMark className="h-7 w-7" />
-          </span>
-          <span className="text-[17px] font-semibold tracking-tight">SetupOps</span>
-          <span className="ml-1 rounded-control border border-white/25 px-1.5 py-0.5 text-[11px] font-medium text-white/80">
-            {t('shell.productTagline')}
-          </span>
-        </div>
-
-        <div className="relative mt-10 max-w-xl lg:mt-16">
-          <h1 className="text-[28px] leading-[1.15] font-semibold tracking-tight sm:text-4xl xl:text-[42px]">
-            {t('login.heroTitle')}
-          </h1>
-          <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-white/80 sm:text-base">{t('login.heroText')}</p>
-
-          <ul className="mt-8 hidden space-y-4 sm:block">
-            {HIGHLIGHTS.map(({ title, text }) => (
-              <li key={title} className="flex gap-3">
-                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30">
-                  <Check className="h-3 w-3" strokeWidth={3} />
-                </span>
-                <p className="text-sm leading-relaxed text-white/80">
-                  <span className="font-semibold text-white">{t(title)}</span> — {t(text)}
-                </p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Product preview: framed real screenshot, bleeding off the bottom edge */}
-        <figure className="relative mt-10 hidden min-h-0 flex-1 items-start overflow-hidden lg:flex">
-          <div className="w-[118%] max-w-none overflow-hidden rounded-t-dialog border border-white/25 bg-white shadow-[0_30px_60px_-15px_rgb(3_20_45/0.55)]">
-            <div className="flex items-center gap-1.5 border-b border-line bg-subtle px-3 py-2" aria-hidden="true">
-              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
-              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
-              <span className="ml-3 rounded-control bg-surface px-2 py-0.5 text-[10px] text-fg-subtle">
-                setupops · {t('shell.navDashboard')}
-              </span>
-            </div>
-            <img
-              src={`/img/preview-dashboard-${lang}.webp`}
-              alt={t('login.previewAlt')}
-              width={1200}
-              height={726}
-              className="block w-full"
-              loading="eager"
-              decoding="async"
-            />
+        {/* Content column: capped width, centred on very wide screens */}
+        <div className="relative mx-auto flex min-h-0 w-full max-w-[640px] flex-1 flex-col px-6 pt-8 pb-10 sm:px-10 lg:py-12 xl:px-12">
+          <div className="flex items-center gap-2.5">
+            <span className="rounded-input bg-white p-[3px] shadow-sm">
+              <BrandMark className="h-7 w-7" />
+            </span>
+            <span className="text-[17px] font-semibold tracking-tight">SetupOps</span>
           </div>
-          <figcaption className="sr-only">{t('login.previewAlt')}</figcaption>
-        </figure>
+
+          <div className="flex min-h-0 flex-1 flex-col justify-center gap-9 pt-12">
+          <div className="shrink-0">
+            <p className="text-xs font-semibold tracking-[0.12em] text-white/70 uppercase">
+              {t('login.eyebrow')}
+            </p>
+            <h1 className="mt-3 max-w-[18ch] text-[28px] leading-[1.15] font-semibold tracking-[-0.02em] text-balance sm:text-[32px] xl:text-[36px]">
+              {t('login.heroTitle')}
+            </h1>
+            <p className="mt-4 max-w-[46ch] text-[15px] leading-relaxed text-white/75">{t('login.heroText')}</p>
+
+            <ul className="mt-7 hidden gap-y-4 sm:grid">
+              {HIGHLIGHTS.map(({ title, text }) => (
+                <li key={title} className="flex gap-3">
+                  <span className="mt-[3px] flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/35">
+                    <Check className="h-2.5 w-2.5" strokeWidth={3.5} />
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">{t(title)}</p>
+                    <p className="mt-0.5 max-w-[48ch] text-[13px] leading-relaxed text-white/70">{t(text)}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Product preview: shrinks with the space left (container units), never cropped; hidden on short screens */}
+          <figure className="relative hidden h-[400px] max-h-full min-h-0 shrink [container-type:size] tall:block">
+            <div className="absolute top-0 left-0 w-[min(100cqw,calc((100cqh-30px)*1.6529))] [@container(max-height:200px)]:hidden overflow-hidden rounded-dialog bg-white shadow-[0_24px_48px_-12px_rgb(3_20_45/0.55),0_0_0_1px_rgb(255_255_255/0.25)]">
+              <div className="flex h-[30px] items-center gap-1.5 border-b border-line bg-subtle px-3" aria-hidden="true">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+                <span className="ml-3 truncate rounded-control bg-surface px-2 py-0.5 text-[10px] text-fg-subtle">
+                  setupops · {t('shell.navDashboard')}
+                </span>
+              </div>
+              <img
+                src={`/img/preview-dashboard-${lang}.webp`}
+                alt={t('login.previewAlt')}
+                width={1200}
+                height={726}
+                className="block h-auto w-full"
+                loading="eager"
+                decoding="async"
+              />
+            </div>
+          </figure>
+          </div>
+        </div>
       </section>
 
       {/* ── Action panel ────────────────────────────────────────────── */}
