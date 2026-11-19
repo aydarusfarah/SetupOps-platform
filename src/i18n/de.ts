@@ -526,10 +526,6 @@ export const de: Messages = {
   "login.featureSetupText": "Typspezifische Vorlagen, damit jedes Gerät die Werkbank gleich verlässt.",
   "login.featureAiTitle": "KI-gestützte Fehlerdiagnose",
   "login.featureAiText": "Wahrscheinliche Ursachen und strukturierte Prüfschritte für jedes Reparaturticket.",
-  "login.footerNote": "Entwickelt mit React, TypeScript, Firebase und Gemini.",
-  "login.signInTitle": "Anmelden",
-  "login.signInSubtitle": "Melden Sie sich mit dem Google-Konto Ihrer Organisation an.",
-  "login.or": "oder",
   "login.exploreDemo": "Demo-Arbeitsbereich ansehen",
   "login.exploreDemoHint": "Keine Anmeldung nötig · Beispieldaten bleiben im Browser",
 
@@ -604,4 +600,12 @@ export const de: Messages = {
   "shell.demoTitle": "Demo-Arbeitsbereich",
   "shell.demoText": "Nur Beispieldaten – Ihre Änderungen bleiben im Browser und werden beim Neuladen zurückgesetzt.",
   "shell.demoSignIn": "Bei einem echten Arbeitsbereich anmelden →",
+
+  // ── login (blue/white split) ──
+  "login.productOverview": "Produktübersicht",
+  "login.welcomeTitle": "Willkommen bei SetupOps",
+  "login.welcomeText": "Sehen Sie sich den Demo-Arbeitsbereich an oder melden Sie sich mit dem Google-Konto Ihrer Organisation an.",
+  "login.orSignIn": "oder bei Ihrem Arbeitsbereich anmelden",
+  "login.previewAlt": "SetupOps-Dashboard mit Bestandskennzahlen, Ticket-Durchsatz und Arbeitsliste der Techniker",
+  "login.viewSource": "Quellcode auf GitHub",
 };

@@ -524,10 +524,6 @@ export const en = {
   "login.featureSetupText": "Type-specific templates so every machine leaves the bench the same way.",
   "login.featureAiTitle": "AI-assisted diagnostics",
   "login.featureAiText": "Probable root causes and step-by-step checks for every repair ticket.",
-  "login.footerNote": "Built with React, TypeScript, Firebase and Gemini.",
-  "login.signInTitle": "Sign in",
-  "login.signInSubtitle": "Use your organisation's Google account to continue.",
-  "login.or": "or",
   "login.exploreDemo": "Explore the demo workspace",
   "login.exploreDemoHint": "No sign-in needed · sample data stays in your browser",
 
@@ -602,6 +598,14 @@ export const en = {
   "shell.demoTitle": "Demo workspace",
   "shell.demoText": "Sample data only — your changes stay in this browser and reset when you reload.",
   "shell.demoSignIn": "Sign in to a real workspace →",
+
+  // ── login (blue/white split) ──
+  "login.productOverview": "Product overview",
+  "login.welcomeTitle": "Welcome to SetupOps",
+  "login.welcomeText": "Explore the demo workspace or sign in with your organisation's Google account.",
+  "login.orSignIn": "or sign in to your workspace",
+  "login.previewAlt": "SetupOps dashboard with fleet KPIs, ticket velocity chart and the technician work queue",
+  "login.viewSource": "View source on GitHub",
 } as const;
 
 export type MessageKey = keyof typeof en;

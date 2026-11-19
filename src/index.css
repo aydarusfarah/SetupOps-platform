@@ -72,7 +72,9 @@
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-:root {
+/* `.theme-light` re-applies the light palette to a subtree (e.g. the sign-in page) inside dark mode. */
+:root,
+.theme-light {
   /* SetupOps corporate palette — neutral greys, one firm blue. */
   --so-canvas: #f3f4f6;
   --so-surface: #ffffff;

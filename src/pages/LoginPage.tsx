@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { AlertCircle, ArrowRight, ClipboardCheck, Cpu, Laptop, ShieldCheck } from 'lucide-react';
+import { AlertCircle, ArrowRight, Check, ShieldCheck } from 'lucide-react';
 import { useWorkshopData } from '../hooks/useWorkshopData';
+import { useLanguage } from '../hooks/useLanguage';
 import { useT, type MessageKey } from '../i18n';
-import { BrandLockup } from '../components/ui/BrandMark';
+import { BrandMark } from '../components/ui/BrandMark';
 import { LanguageSwitch } from '../components/ui/LanguageSwitch';
 
-const HIGHLIGHTS: Array<{ icon: typeof Laptop; title: MessageKey; text: MessageKey }> = [
-  { icon: Laptop, title: 'login.featureLifecycleTitle', text: 'login.featureLifecycleText' },
-  { icon: ClipboardCheck, title: 'login.featureSetupTitle', text: 'login.featureSetupText' },
-  { icon: Cpu, title: 'login.featureAiTitle', text: 'login.featureAiText' },
+const REPO_URL = 'https://github.com/aydarusfarah/SetupOps-platform';
+
+const HIGHLIGHTS: Array<{ title: MessageKey; text: MessageKey }> = [
+  { title: 'login.featureLifecycleTitle', text: 'login.featureLifecycleText' },
+  { title: 'login.featureSetupTitle', text: 'login.featureSetupText' },
+  { title: 'login.featureAiTitle', text: 'login.featureAiText' },
 ];
 
 function GoogleIcon() {
@@ -34,8 +37,21 @@ function GoogleIcon() {
   );
 }
 
+function GitHubIcon() {
+  return (
+    <svg className="h-3.5 w-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+    </svg>
+  );
+}
+
+/**
+ * Sign-in / entry page. Always rendered with the light palette (`theme-light`):
+ * brand-blue story panel on the left, white action panel on the right.
+ */
 export function LoginPage() {
   const { signInWithGoogle } = useWorkshopData();
+  const { lang } = useLanguage();
   const t = useT();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,59 +69,86 @@ export function LoginPage() {
   };
 
   return (
-    <div className="grid min-h-screen bg-canvas lg:grid-cols-[minmax(0,5fr)_minmax(0,4fr)]">
-      {/* Product panel */}
-      <section className="relative hidden flex-col justify-between overflow-hidden bg-shell p-10 text-shell-fg lg:flex xl:p-14">
+    <div className="theme-light grid min-h-screen bg-surface text-fg [color-scheme:light] lg:h-screen lg:grid-cols-2 lg:overflow-hidden">
+      {/* ── Brand panel ─────────────────────────────────────────────── */}
+      <section
+        aria-label={t('login.productOverview')}
+        className="relative flex min-h-0 flex-col overflow-hidden bg-[linear-gradient(150deg,#0b5cb8_0%,#0a4f9e_55%,#083d7c_100%)] px-6 pt-8 pb-10 text-white sm:px-10 lg:px-14 lg:pt-12 lg:pb-0"
+      >
+        {/* subtle dot grid + glow */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
+          className="pointer-events-none absolute inset-0 opacity-[0.12] [background-image:radial-gradient(rgb(255_255_255/0.9)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
         />
-        <div className="relative">
-          <BrandLockup tagline={t('shell.productTagline')} />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full bg-white/10 blur-3xl"
+        />
+
+        <div className="relative flex items-center gap-2.5">
+          <span className="rounded-input bg-white/95 p-0.5 shadow-sm">
+            <BrandMark className="h-7 w-7" />
+          </span>
+          <span className="text-[17px] font-semibold tracking-tight">SetupOps</span>
+          <span className="ml-1 rounded-control border border-white/25 px-1.5 py-0.5 text-[11px] font-medium text-white/80">
+            {t('shell.productTagline')}
+          </span>
         </div>
 
-        <div className="relative max-w-lg">
-          <h1 className="text-3xl leading-tight font-semibold tracking-tight xl:text-4xl">
+        <div className="relative mt-10 max-w-xl lg:mt-16">
+          <h1 className="text-[28px] leading-[1.15] font-semibold tracking-tight sm:text-4xl xl:text-[42px]">
             {t('login.heroTitle')}
           </h1>
-          <p className="mt-4 text-base leading-relaxed text-shell-muted">{t('login.heroText')}</p>
+          <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-white/80 sm:text-base">{t('login.heroText')}</p>
 
-          <ul className="mt-10 space-y-6">
-            {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="flex gap-4">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-input border border-shell-line bg-shell-hover text-shell-fg">
-                  <Icon className="h-4 w-4" />
+          <ul className="mt-8 hidden space-y-4 sm:block">
+            {HIGHLIGHTS.map(({ title, text }) => (
+              <li key={title} className="flex gap-3">
+                <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30">
+                  <Check className="h-3 w-3" strokeWidth={3} />
                 </span>
-                <div>
-                  <p className="text-sm font-semibold">{t(title)}</p>
-                  <p className="mt-0.5 text-sm leading-relaxed text-shell-muted">{t(text)}</p>
-                </div>
+                <p className="text-sm leading-relaxed text-white/80">
+                  <span className="font-semibold text-white">{t(title)}</span> — {t(text)}
+                </p>
               </li>
             ))}
           </ul>
         </div>
 
-        <p className="relative text-xs text-shell-muted">{t('login.footerNote')}</p>
+        {/* Product preview: framed real screenshot, bleeding off the bottom edge */}
+        <figure className="relative mt-10 hidden min-h-0 flex-1 items-start overflow-hidden lg:flex">
+          <div className="w-[118%] max-w-none overflow-hidden rounded-t-dialog border border-white/25 bg-white shadow-[0_30px_60px_-15px_rgb(3_20_45/0.55)]">
+            <div className="flex items-center gap-1.5 border-b border-line bg-subtle px-3 py-2" aria-hidden="true">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+              <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+              <span className="ml-3 rounded-control bg-surface px-2 py-0.5 text-[10px] text-fg-subtle">
+                setupops · {t('shell.navDashboard')}
+              </span>
+            </div>
+            <img
+              src={`/img/preview-dashboard-${lang}.webp`}
+              alt={t('login.previewAlt')}
+              width={1200}
+              height={726}
+              className="block w-full"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+          <figcaption className="sr-only">{t('login.previewAlt')}</figcaption>
+        </figure>
       </section>
 
-      {/* Sign-in panel */}
-      <section className="flex flex-col px-6 py-6 sm:px-10">
-        <div className="flex items-center justify-between">
-          <span className="lg:hidden">
-            <BrandLockup tone="light" />
-          </span>
-          <span className="hidden lg:block" />
+      {/* ── Action panel ────────────────────────────────────────────── */}
+      <section className="flex min-h-0 flex-col overflow-y-auto bg-surface px-6 py-6 sm:px-10">
+        <div className="flex justify-end">
           <LanguageSwitch />
         </div>
 
-        <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-12">
-          <h2 className="text-2xl font-semibold tracking-tight text-fg">{t('login.signInTitle')}</h2>
-          <p className="mt-2 text-sm text-fg-muted">{t('login.signInSubtitle')}</p>
+        <main className="mx-auto flex w-full max-w-[380px] flex-1 flex-col justify-center py-10">
+          <h2 className="text-[26px] leading-tight font-semibold tracking-tight text-fg">{t('login.welcomeTitle')}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-fg-muted">{t('login.welcomeText')}</p>
 
           {error && (
             <div
@@ -117,38 +160,49 @@ export function LoginPage() {
             </div>
           )}
 
-          <button
-            type="button"
-            onClick={handleLogin}
-            disabled={loading}
-            className="mt-8 flex h-10 w-full items-center justify-center gap-3 rounded-input border border-line-strong bg-surface px-4 text-sm font-medium text-fg shadow-xs transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:opacity-60"
-          >
-            <GoogleIcon />
-            <span>{loading ? t('login.signingIn') : t('login.signInWithGoogle')}</span>
-          </button>
-
-          <div className="my-6 flex items-center gap-3 text-xs text-fg-subtle">
-            <span className="h-px flex-1 bg-line" />
-            {t('login.or')}
-            <span className="h-px flex-1 bg-line" />
-          </div>
-
           <a
             href="/?autostart=1"
-            className="group flex h-10 w-full items-center justify-center gap-2 rounded-input bg-primary px-4 text-sm font-medium text-on-primary transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            className="group mt-8 flex h-11 w-full items-center justify-center gap-2 rounded-input bg-primary px-4 text-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
           >
             {t('login.exploreDemo')}
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </a>
           <p className="mt-2 text-center text-xs text-fg-subtle">{t('login.exploreDemoHint')}</p>
 
-          <p className="mt-10 flex items-start gap-2 rounded-input border border-line bg-subtle p-3 text-xs leading-relaxed text-fg-muted">
-            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
+          <div className="my-7 flex items-center gap-3 text-xs text-fg-subtle">
+            <span className="h-px flex-1 bg-line" />
+            {t('login.orSignIn')}
+            <span className="h-px flex-1 bg-line" />
+          </div>
+
+          <button
+            type="button"
+            onClick={handleLogin}
+            disabled={loading}
+            className="flex h-11 w-full items-center justify-center gap-3 rounded-input border border-line-strong bg-surface px-4 text-sm font-medium text-fg transition-colors hover:bg-subtle focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:opacity-60"
+          >
+            <GoogleIcon />
+            <span>{loading ? t('login.signingIn') : t('login.signInWithGoogle')}</span>
+          </button>
+
+          <p className="mt-8 flex items-start gap-2 text-xs leading-relaxed text-fg-subtle">
+            <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
             {t('login.internalItWorkshopPortalThe')}
           </p>
-        </div>
+        </main>
 
-        <p className="text-center text-xs text-fg-subtle">© {new Date().getFullYear()} SetupOps</p>
+        <footer className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-fg-subtle">
+          <span>© {new Date().getFullYear()} SetupOps</span>
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 hover:text-fg"
+          >
+            <GitHubIcon />
+            {t('login.viewSource')}
+          </a>
+        </footer>
       </section>
     </div>
   );
