@@ -133,7 +133,7 @@ export function TicketsPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-fg">
+          <h1 className="text-[22px] leading-tight font-semibold tracking-tight text-fg">
             Tickets
           </h1>
           <p className="mt-1 text-sm text-fg-muted">
@@ -302,15 +302,15 @@ export function TicketsPage() {
           <div className="hidden overflow-hidden rounded-card border border-line bg-surface shadow-sm md:block">
             <div className="max-h-[620px] overflow-auto">
               <table className="w-full border-collapse text-left text-sm">
-                <thead className="sticky top-0 z-10 border-b border-line bg-subtle text-xs font-semibold tracking-wider text-fg-muted uppercase">
+                <thead className="sticky top-0 z-10 bg-subtle text-xs font-semibold text-fg-muted shadow-[inset_0_-1px_0_var(--so-line)]">
                   <tr>
-                    <th className="px-4 py-3">{t('tickets.ticketNo')}</th>
-                    <th className="px-4 py-3">{t('tickets.titleDevice')}</th>
-                    <th className="px-4 py-3">{t('tickets.category')}</th>
-                    <th className="px-4 py-3">{t('common.priority')}</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">{t('common.assignee')}</th>
-                    <th className="px-4 py-3">{t('tickets.created')}</th>
+                    <th className="px-4 py-2.5">{t('tickets.ticketNo')}</th>
+                    <th className="px-4 py-2.5">{t('tickets.titleDevice')}</th>
+                    <th className="px-4 py-2.5">{t('tickets.category')}</th>
+                    <th className="px-4 py-2.5">{t('common.priority')}</th>
+                    <th className="px-4 py-2.5">Status</th>
+                    <th className="px-4 py-2.5">{t('common.assignee')}</th>
+                    <th className="px-4 py-2.5">{t('tickets.created')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line-subtle">

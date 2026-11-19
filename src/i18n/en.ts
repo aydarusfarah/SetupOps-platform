@@ -274,10 +274,6 @@ export const en = {
 
   // ── login ──
   "login.signInFailedPleaseTry": "Sign-in failed. Please try again.",
-  "login.itWorkshopOperations": "IT Workshop Operations",
-  "login.language": "Language",
-  "login.bgPrimaryTextWhite": "bg-primary text-white",
-  "login.devicesTicketsSetupInOne": "Devices. Tickets. Setup. In one place.",
   "login.signingIn": "Signing in…",
   "login.signInWithGoogle": "Sign in with Google",
   "login.internalItWorkshopPortalThe": "Internal IT workshop portal. The first signed-in user automatically receives Administrator permissions.",
@@ -368,7 +364,6 @@ export const en = {
   "shell.openGlobalSearchCtrlK": "Open global search (Ctrl+K)",
   "shell.search": "Search…",
   "shell.language": "Language",
-  "shell.bgPrimaryTextWhiteShadow": "bg-primary text-white shadow-xs",
   "shell.switchToLightTheme": "Switch to light theme",
   "shell.switchToDarkTheme": "Switch to dark theme",
   "shell.openUserMenu": "Open user menu",
@@ -513,6 +508,31 @@ export const en = {
   "shell.navDashboard": "Dashboard",
   "shell.navTickets": "Tickets",
   "shell.navSettings": "Settings",
+
+  // ── shell (corporate layout) ──
+  "shell.workspace": "Workspace",
+  "shell.productTagline": "IT Workshop",
+  "shell.searchPlaceholder": "Search devices, tickets, serial numbers…",
+  "shell.breadcrumb": "Breadcrumb",
+
+  // ── login (split screen) ──
+  "login.heroTitle": "Every device, from intake to handover.",
+  "login.heroText": "SetupOps is the operations hub for IT workshops: track hardware, run standardised Windows setups and resolve repair tickets in one place.",
+  "login.featureLifecycleTitle": "Device lifecycle",
+  "login.featureLifecycleText": "Asset tags, QR labels, status tracking and signed handovers.",
+  "login.featureSetupTitle": "Setup checklists",
+  "login.featureSetupText": "Type-specific templates so every machine leaves the bench the same way.",
+  "login.featureAiTitle": "AI-assisted diagnostics",
+  "login.featureAiText": "Probable root causes and step-by-step checks for every repair ticket.",
+  "login.footerNote": "Built with React, TypeScript, Firebase and Gemini.",
+  "login.signInTitle": "Sign in",
+  "login.signInSubtitle": "Use your organisation's Google account to continue.",
+  "login.or": "or",
+  "login.exploreDemo": "Explore the demo workspace",
+  "login.exploreDemoHint": "No sign-in needed · sample data stays in your browser",
+
+  // ── common (actions) ──
+  "common.moreActions": "More actions",
 } as const;
 
 export type MessageKey = keyof typeof en;

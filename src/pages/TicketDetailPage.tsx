@@ -39,6 +39,7 @@ import {
 import { TicketPriorityBadge, TicketStatusBadge } from '../components/ui/Badges';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { useT } from '../i18n';
+import { OverflowMenu } from '../components/ui/OverflowMenu';
 
 export function TicketDetailPage() {
   const { id } = useParams();
@@ -336,7 +337,7 @@ export function TicketDetailPage() {
               </span>
             </div>
 
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-fg">
+            <h1 className="mt-3 text-[22px] leading-tight font-semibold tracking-tight text-fg">
               {ticket.titel}
             </h1>
 
@@ -361,7 +362,7 @@ export function TicketDetailPage() {
               type="button"
               onClick={runDiagnosis}
               disabled={diagLoading}
-              className="inline-flex items-center gap-2 rounded-input bg-primary px-4 py-2 text-sm font-medium text-white whitespace-nowrap transition-colors hover:bg-primary-hover disabled:opacity-60"
+              className="btn btn-primary"
             >
               <Cpu className="h-4 w-4" />
               {diagLoading
@@ -369,15 +370,17 @@ export function TicketDetailPage() {
                 : t('ticketDetail.aiDiagnostics')}
             </button>
             {isAdmin && (
-              <button
-                type="button"
-                onClick={() => setDeleteDialogOpen(true)}
-                aria-label={t('ticketDetail.deleteTicketTicketnr', { ticketNr: ticket.ticketNr })}
-                className="inline-flex items-center gap-2 rounded-input border border-danger/30 bg-field px-3.5 py-2 text-sm font-medium text-danger hover:bg-danger/10"
-              >
-                <Trash2 className="h-4 w-4" />
-                {t('ticketDetail.delete')}
-              </button>
+              <OverflowMenu
+                label={t('common.moreActions')}
+                items={[
+                  {
+                    label: t('ticketDetail.deleteTicketTicketnr', { ticketNr: ticket.ticketNr }),
+                    icon: <Trash2 className="h-4 w-4" />,
+                    tone: 'danger',
+                    onSelect: () => setDeleteDialogOpen(true),
+                  },
+                ]}
+              />
             )}
           </div>
         </div>

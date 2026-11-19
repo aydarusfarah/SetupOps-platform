@@ -276,10 +276,6 @@ export const de: Messages = {
 
   // ── login ──
   "login.signInFailedPleaseTry": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.",
-  "login.itWorkshopOperations": "IT-Werkstatt & Betrieb",
-  "login.language": "Sprache",
-  "login.bgPrimaryTextWhite": "text-fg-muted hover:text-accent",
-  "login.devicesTicketsSetupInOne": "Geräte. Tickets. Einrichtung. An einem Ort.",
   "login.signingIn": "Anmeldung läuft…",
   "login.signInWithGoogle": "Mit Google anmelden",
   "login.internalItWorkshopPortalThe": "Internes Werkstatt-Portal. Der erste angemeldete Benutzer erhält automatisch Administrator-Rechte.",
@@ -370,7 +366,6 @@ export const de: Messages = {
   "shell.openGlobalSearchCtrlK": "Globale Suche öffnen (Strg+K)",
   "shell.search": "Suchen…",
   "shell.language": "Sprache",
-  "shell.bgPrimaryTextWhiteShadow": "text-fg-muted hover:text-accent dark:hover:text-white",
   "shell.switchToLightTheme": "Helles Design aktivieren",
   "shell.switchToDarkTheme": "Dunkles Design aktivieren",
   "shell.openUserMenu": "Benutzermenü öffnen",
@@ -515,4 +510,29 @@ export const de: Messages = {
   "shell.navDashboard": "Dashboard",
   "shell.navTickets": "Tickets",
   "shell.navSettings": "Einstellungen",
+
+  // ── shell (corporate layout) ──
+  "shell.workspace": "Arbeitsbereich",
+  "shell.productTagline": "IT-Werkstatt",
+  "shell.searchPlaceholder": "Geräte, Tickets, Seriennummern suchen…",
+  "shell.breadcrumb": "Brotkrumen-Navigation",
+
+  // ── login (split screen) ──
+  "login.heroTitle": "Jedes Gerät – vom Wareneingang bis zur Übergabe.",
+  "login.heroText": "SetupOps ist die Betriebszentrale für IT-Werkstätten: Hardware verwalten, Windows-Einrichtungen standardisiert durchführen und Reparaturtickets an einem Ort lösen.",
+  "login.featureLifecycleTitle": "Geräte-Lebenszyklus",
+  "login.featureLifecycleText": "Asset-Tags, QR-Etiketten, Statusverfolgung und unterschriebene Übergaben.",
+  "login.featureSetupTitle": "Einrichtungs-Checklisten",
+  "login.featureSetupText": "Typspezifische Vorlagen, damit jedes Gerät die Werkbank gleich verlässt.",
+  "login.featureAiTitle": "KI-gestützte Fehlerdiagnose",
+  "login.featureAiText": "Wahrscheinliche Ursachen und strukturierte Prüfschritte für jedes Reparaturticket.",
+  "login.footerNote": "Entwickelt mit React, TypeScript, Firebase und Gemini.",
+  "login.signInTitle": "Anmelden",
+  "login.signInSubtitle": "Melden Sie sich mit dem Google-Konto Ihrer Organisation an.",
+  "login.or": "oder",
+  "login.exploreDemo": "Demo-Arbeitsbereich ansehen",
+  "login.exploreDemoHint": "Keine Anmeldung nötig · Beispieldaten bleiben im Browser",
+
+  // ── common (actions) ──
+  "common.moreActions": "Weitere Aktionen",
 };

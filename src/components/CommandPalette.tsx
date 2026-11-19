@@ -73,7 +73,7 @@ export function CommandPalette({ open, onClose }: CommandPaletteProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-[#091529]/60 px-4 pt-20 backdrop-blur-[1px]"
+      className="fixed inset-0 z-50 flex items-start justify-center bg-shell/60 px-4 pt-20 backdrop-blur-[1px]"
       role="dialog"
       aria-modal="true"
       aria-label={t('palette.globalSearch')}

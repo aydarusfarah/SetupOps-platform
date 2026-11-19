@@ -174,7 +174,7 @@ export function DevicesPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-fg">
+          <h1 className="text-[22px] leading-tight font-semibold tracking-tight text-fg">
             {t('common.devices')}
           </h1>
           <p className="mt-1 text-sm text-fg-muted">
@@ -345,9 +345,9 @@ export function DevicesPage() {
           <div className="hidden overflow-hidden rounded-card border border-line bg-surface shadow-sm md:block">
             <div className="max-h-[620px] overflow-auto">
               <table className="w-full border-collapse text-left text-sm">
-                <thead className="sticky top-0 z-10 border-b border-line bg-subtle text-xs font-semibold tracking-wider text-fg-muted uppercase">
+                <thead className="sticky top-0 z-10 bg-subtle text-xs font-semibold text-fg-muted shadow-[inset_0_-1px_0_var(--so-line)]">
                   <tr>
-                    <th className="w-10 px-4 py-3">
+                    <th className="w-10 px-4 py-2.5">
                       <input
                         type="checkbox"
                         aria-label={t('devices.selectAllDevicesOnPage')}
@@ -359,49 +359,49 @@ export function DevicesPage() {
                         className="h-4 w-4 rounded border-line-strong text-accent"
                       />
                     </th>
-                    <th className="px-4 py-3">
+                    <th className="px-4 py-2.5">
                       <button
                         type="button"
                         onClick={() => toggleSort('assetTag')}
-                        className="inline-flex items-center gap-1 uppercase tracking-wider hover:text-accent dark:hover:text-white"
+                        className="inline-flex items-center gap-1 hover:text-fg"
                       >
                         {t('devices.assetTag')}
                         <ArrowUpDown className="h-3 w-3" />
                       </button>
                     </th>
-                    <th className="px-4 py-3">
+                    <th className="px-4 py-2.5">
                       <button
                         type="button"
                         onClick={() => toggleSort('modell')}
-                        className="inline-flex items-center gap-1 uppercase tracking-wider hover:text-accent dark:hover:text-white"
+                        className="inline-flex items-center gap-1 hover:text-fg"
                       >
                         {t('devices.deviceModel')}
                         <ArrowUpDown className="h-3 w-3" />
                       </button>
                     </th>
-                    <th className="px-4 py-3">{t('devices.serialNumber')}</th>
-                    <th className="px-4 py-3">
+                    <th className="px-4 py-2.5">{t('devices.serialNumber')}</th>
+                    <th className="px-4 py-2.5">
                       <button
                         type="button"
                         onClick={() => toggleSort('status')}
-                        className="inline-flex items-center gap-1 uppercase tracking-wider hover:text-accent dark:hover:text-white"
+                        className="inline-flex items-center gap-1 hover:text-fg"
                       >
                         Status
                         <ArrowUpDown className="h-3 w-3" />
                       </button>
                     </th>
-                    <th className="px-4 py-3">{t('devices.checklist')}</th>
-                    <th className="px-4 py-3">
+                    <th className="px-4 py-2.5">{t('devices.checklist')}</th>
+                    <th className="px-4 py-2.5">
                       <button
                         type="button"
                         onClick={() => toggleSort('standort')}
-                        className="inline-flex items-center gap-1 uppercase tracking-wider hover:text-accent dark:hover:text-white"
+                        className="inline-flex items-center gap-1 hover:text-fg"
                       >
                         {t('common.location')}
                         <ArrowUpDown className="h-3 w-3" />
                       </button>
                     </th>
-                    <th className="w-12 px-3 py-3 text-right">
+                    <th className="w-12 px-3 py-2.5 text-right">
                       <span className="sr-only">{t('devices.actions')}</span>
                     </th>
                   </tr>

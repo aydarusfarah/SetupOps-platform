@@ -197,7 +197,7 @@ export function DeviceFormPage() {
     <div className="mx-auto max-w-3xl space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-fg">
+          <h1 className="text-[22px] leading-tight font-semibold tracking-tight text-fg">
             {isEdit
               ? t('deviceForm.editDeviceAssettag', { assetTag: existingDevice?.assetTag })
               : t('deviceForm.addNewDevice')}

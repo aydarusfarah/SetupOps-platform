@@ -41,12 +41,12 @@ export function ConfirmDialog({
 
   const confirmClasses =
     variant === 'danger'
-      ? 'bg-danger hover:bg-[#B91C1C] text-white'
+      ? 'bg-danger hover:bg-danger-fg text-white'
       : 'bg-primary hover:bg-primary-hover text-white';
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#091529]/60 p-4 backdrop-blur-[1px]"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-shell/60 p-4 backdrop-blur-[1px]"
       role="dialog"
       aria-modal="true"
       aria-labelledby="confirm-dialog-title"

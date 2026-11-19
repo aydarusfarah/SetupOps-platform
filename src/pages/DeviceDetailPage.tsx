@@ -39,6 +39,7 @@ import { HandoverModal } from '../components/HandoverModal';
 import { HandoverReceiptModal } from '../components/HandoverReceiptModal';
 import type { HandoverInput } from '../types';
 import { useT } from '../i18n';
+import { OverflowMenu } from '../components/ui/OverflowMenu';
 
 type DetailTab = 'overview' | 'checklist' | 'tickets' | 'history';
 
@@ -268,7 +269,7 @@ export function DeviceDetailPage() {
                 </span>
               )}
             </div>
-            <h1 className="mt-3 text-2xl font-semibold tracking-tight text-fg">
+            <h1 className="mt-3 text-[22px] leading-tight font-semibold tracking-tight text-fg">
               {device.hersteller} {device.modell}
             </h1>
             <div className="mt-1.5 flex flex-wrap items-center gap-2 text-sm text-fg-muted">
@@ -307,36 +308,36 @@ export function DeviceDetailPage() {
             <button
               type="button"
               onClick={() => setPrintOpen(true)}
-              className="inline-flex items-center gap-2 rounded-input border border-line bg-subtle px-3.5 py-2 text-sm font-medium text-fg whitespace-nowrap hover:bg-muted"
+              className="btn btn-secondary"
             >
-              <Printer className="h-4 w-4 text-accent" />
+              <Printer className="h-4 w-4" />
               {t('deviceDetail.printLabel')}
             </button>
-            <Link
-              to={`/devices/new?cloneFrom=${device.id}`}
-              className="inline-flex items-center gap-2 rounded-input border border-line bg-subtle px-3.5 py-2 text-sm font-medium text-fg whitespace-nowrap hover:bg-muted"
-            >
-              <Copy className="h-4 w-4 text-accent" />
-              {t('deviceDetail.cloneSpecs')}
-            </Link>
-            <Link
-              to={`/devices/${device.id}/edit`}
-              className="inline-flex items-center gap-2 rounded-input bg-primary px-3.5 py-2 text-sm font-medium text-white whitespace-nowrap hover:bg-primary-hover"
-            >
+            <Link to={`/devices/${device.id}/edit`} className="btn btn-primary">
               <Edit3 className="h-4 w-4" />
               {t('deviceDetail.edit')}
             </Link>
-            {isAdmin && (
-              <button
-                type="button"
-                onClick={() => setDeleteDialogOpen(true)}
-                aria-label={t('deviceDetail.deleteDeviceAssettag', { assetTag: device.assetTag })}
-                className="inline-flex items-center gap-2 rounded-input border border-danger/30 bg-field px-3.5 py-2 text-sm font-medium text-danger whitespace-nowrap hover:bg-danger/10"
-              >
-                <Trash2 className="h-4 w-4" />
-                {t('deviceDetail.delete')}
-              </button>
-            )}
+            <OverflowMenu
+              label={t('common.moreActions')}
+              items={[
+                {
+                  label: t('deviceDetail.cloneSpecs'),
+                  icon: <Copy className="h-4 w-4 text-fg-subtle" />,
+                  to: `/devices/new?cloneFrom=${device.id}`,
+                },
+                ...(isAdmin
+                  ? [
+                      {
+                        label: t('deviceDetail.deleteDeviceAssettag', { assetTag: device.assetTag }),
+                        icon: <Trash2 className="h-4 w-4" />,
+                        tone: 'danger' as const,
+                        separated: true,
+                        onSelect: () => setDeleteDialogOpen(true),
+                      },
+                    ]
+                  : []),
+              ]}
+            />
           </div>
         </div>
 
@@ -344,7 +345,7 @@ export function DeviceDetailPage() {
         <div
           role="tablist"
           aria-label={t('deviceDetail.deviceSections')}
-          className="mt-6 flex gap-1 overflow-x-auto border-t border-line-subtle pt-3"
+          className="-mb-6 mt-5 flex gap-6 overflow-x-auto border-t border-line-subtle"
         >
           {tabs.map((tab) => (
             <button
@@ -353,10 +354,10 @@ export function DeviceDetailPage() {
               role="tab"
               aria-selected={activeTab === tab.key}
               onClick={() => switchTab(tab.key)}
-              className={`rounded-input px-3.5 py-2 text-sm font-medium whitespace-nowrap transition-colors ${
+              className={`border-b-2 py-3 text-sm whitespace-nowrap transition-colors focus-visible:outline-2 focus-visible:outline-focus ${
                 activeTab === tab.key
-                  ? 'bg-primary text-white shadow-xs'
-                  : 'text-fg-muted hover:bg-muted hover:text-fg'
+                  ? 'border-primary font-semibold text-fg'
+                  : 'border-transparent font-medium text-fg-muted hover:border-line-strong hover:text-fg'
               }`}
             >
               {tab.label}
@@ -755,7 +756,7 @@ export function DeviceDetailPage() {
 
       {returnModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#091529]/60 p-4 backdrop-blur-[1px]"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-shell/60 p-4 backdrop-blur-[1px]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="return-modal-title"
