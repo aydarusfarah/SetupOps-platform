@@ -49,5 +49,10 @@
   "engines": {
     "node": ">=22.18"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aydarusfarah/SetupOps-platform.git"
+  },
+  "homepage": "https://github.com/aydarusfarah/SetupOps-platform#readme"
 }

@@ -78,11 +78,11 @@ gcloud iam workload-identity-pools providers create-oidc github \
   --location global --workload-identity-pool github \
   --issuer-uri https://token.actions.githubusercontent.com \
   --attribute-mapping "google.subject=assertion.sub,attribute.repository=assertion.repository" \
-  --attribute-condition "assertion.repository=='<github-user>/setupops'"
+  --attribute-condition "assertion.repository=='aydarusfarah/SetupOps-platform'"
 POOL=$(gcloud iam workload-identity-pools describe github --location global --format 'value(name)')
 gcloud iam service-accounts add-iam-policy-binding "$SA" \
   --role roles/iam.workloadIdentityUser \
-  --member "principalSet://iam.googleapis.com/$POOL/attribute.repository/<github-user>/setupops"
+  --member "principalSet://iam.googleapis.com/$POOL/attribute.repository/aydarusfarah/SetupOps-platform"
 ```
 
 Then add these **repository secrets** (Settings → Secrets and variables → Actions):

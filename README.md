@@ -6,6 +6,7 @@
 
 **Device lifecycle, repair tickets and Windows setup checklists for IT workshops — in one place.**
 
+[![CI](https://github.com/aydarusfarah/SetupOps-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/aydarusfarah/SetupOps-platform/actions/workflows/ci.yml)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-149ECA?logo=react&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-Auth%20%C2%B7%20Firestore-DD2C00?logo=firebase&logoColor=white)
